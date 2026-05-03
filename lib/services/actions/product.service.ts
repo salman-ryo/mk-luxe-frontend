@@ -23,7 +23,6 @@ export async function getBestSellers(): Promise<Product[]> {
   }
 
   const data: ProductsResponse = await res.json();
-  console.log("🚀 ~ getBestSellers ~ data:", data)
 
   return data.results.filter((p) => p.is_available_online);
 }

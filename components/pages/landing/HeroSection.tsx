@@ -5,7 +5,7 @@ export default function HeroSection() {
     <section className="relative h-[80vh] flex items-center overflow-hidden">
       <div className="absolute inset-0 bg-linear-to-r from-background via-background/40 to-transparent z-10" />
       <img
-        src="/dark-moody-luxury-jewelry-necklace.jpg"
+        src="/images/hero/dark-moody-luxury-jewelry-necklace.jpg"
         alt="Hero Jewelry"
         className="absolute inset-0 w-full h-full object-cover opacity-60"
       />
