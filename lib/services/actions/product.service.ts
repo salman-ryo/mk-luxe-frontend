@@ -1,5 +1,5 @@
 import { serverEnv } from "@/core/env.server";
-import type { Product } from "@/types/api";
+import type { Product, ProductsResponse } from "@/types/api";
 
 /** Revalidate every 5 minutes — stock/availability can change */
 const PRODUCTS_REVALIDATE_SECONDS = 300;
@@ -22,7 +22,8 @@ export async function getBestSellers(): Promise<Product[]> {
     );
   }
 
-  const data: Product[] = await res.json();
+  const data: ProductsResponse = await res.json();
+  console.log("🚀 ~ getBestSellers ~ data:", data)
 
-  return data.filter((p) => p.is_available_online);
+  return data.results.filter((p) => p.is_available_online);
 }

@@ -48,3 +48,10 @@ export interface Product {
   has_stock: boolean;
   is_available_online: boolean;
 }
+
+export type ProductsResponse = {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: Product[];
+};
