@@ -55,7 +55,7 @@ export const aboutPageData: AboutPageData = {
     subtitle: "Bulk Sourced. Directly Priced. Made for Everyday Style.",
     description:
       "Founded in 2025, MkLuxeDivine was built with a simple idea: source metallic jewellery in bulk and bring it directly to people with style, value, and confidence. Every piece reflects our focus on accessible elegance and dependable quality.",
-    image: "/craftsman-working-on-jewellery.jpg",
+    image: "/images/about/craftsman-working-on-jewellery.jpg",
     imageAlt: "Our Story",
     primaryButton: {
       label: "Shop Now",
