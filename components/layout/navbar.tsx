@@ -27,7 +27,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-white/5 backdrop-blur-md py-3">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-white/5 backdrop-blur-md py-3 px-4">
       {/* 
          LAYOUT FIX:
          - Mobile: 'flex justify-between' pushes content to edges.
