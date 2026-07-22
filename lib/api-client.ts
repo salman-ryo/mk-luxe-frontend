@@ -1,6 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { getApiUrl } from './config';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
+const API_BASE_URL = getApiUrl();
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -58,9 +59,9 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError);
         if (typeof window !== 'undefined') {
-          // Trigger redirect on auth failure
+          // Trigger redirect on auth failure only when visiting admin pages
           window.dispatchEvent(new Event('auth:unauthorized'));
-          if (window.location.pathname !== '/admin/login') {
+          if (window.location.pathname.startsWith('/admin') && window.location.pathname !== '/admin/login') {
             window.location.href = '/admin/login';
           }
         }

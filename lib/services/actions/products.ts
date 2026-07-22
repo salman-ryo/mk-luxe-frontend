@@ -1,18 +1,11 @@
 import "server-only"
 import { cache } from "react"
+import { getApiUrl } from "@/lib/config"
 import type { Product, ApiResponse } from "@/types/api"
-
-function getBackendBaseUrl() {
-  const baseUrl = process.env.BACKEND_URI
-  if (!baseUrl) {
-    throw new Error("Missing BACKEND_URI environment variable")
-  }
-  return baseUrl.replace(/\/$/, "")
-}
 
 export const getProductBySlug = cache(async (slug: string): Promise<Product | null> => {
   const safeSlug = encodeURIComponent(slug)
-  const url = `${getBackendBaseUrl()}/api/v1/products/${safeSlug}`
+  const url = getApiUrl(`products/${safeSlug}`)
 
   const response = await fetch(url, {
     method: "GET",

@@ -137,13 +137,31 @@ export default function ShopFilters({ initialFilters }: { initialFilters: Filter
         <div className="flex justify-between items-center mb-3 border-b border-border pb-2">
           <h2 className="uppercase text-xs tracking-widest font-bold">Category</h2>
         </div>
-        <input
+        <select
           name="category"
-          type="text"
-          placeholder="rings"
           defaultValue={initialFilters.category}
-          className="w-full bg-transparent border border-border px-3 py-2 text-xs uppercase tracking-widest focus:outline-none focus:border-primary"
-        />
+          className="w-full bg-transparent border border-border px-3 py-2 text-xs uppercase tracking-widest focus:outline-none focus:border-primary text-foreground cursor-pointer"
+        >
+          <option value="" className="bg-[#0a0a0c]">All Categories</option>
+          <option value="earrings" className="bg-[#0a0a0c]">Earrings</option>
+          <option value="necklaces" className="bg-[#0a0a0c]">Necklaces</option>
+          <option value="jewelry-sets" className="bg-[#0a0a0c]">Jewelry Sets</option>
+          <option value="rings" className="bg-[#0a0a0c]">Rings</option>
+          <option value="bracelets-bangles" className="bg-[#0a0a0c]">Bracelets & Bangles</option>
+          <option value="anklets" className="bg-[#0a0a0c]">Anklets</option>
+          <option value="nose-pins" className="bg-[#0a0a0c]">Nose Pins</option>
+          <option value="hair-accessories" className="bg-[#0a0a0c]">Hair Accessories</option>
+          <option value="bridal-jewelry" className="bg-[#0a0a0c]">Bridal Jewelry</option>
+          <option value="traditional-jewelry" className="bg-[#0a0a0c]">Traditional Jewelry</option>
+          <option value="men-s-jewelry" className="bg-[#0a0a0c]">Men's Jewelry</option>
+          <option value="pendants" className="bg-[#0a0a0c]">Pendants</option>
+          <option value="mangalsutra" className="bg-[#0a0a0c]">Mangalsutra</option>
+          <option value="brooches" className="bg-[#0a0a0c]">Brooches</option>
+          <option value="toe-rings" className="bg-[#0a0a0c]">Toe Rings</option>
+          <option value="waist-chains" className="bg-[#0a0a0c]">Waist Chains</option>
+          <option value="body-jewelry" className="bg-[#0a0a0c]">Body Jewelry</option>
+          <option value="charms" className="bg-[#0a0a0c]">Charms</option>
+        </select>
       </div>
 
       <div>

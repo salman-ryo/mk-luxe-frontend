@@ -5,15 +5,17 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/a
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const cookieHeader = request.headers.get('cookie') || '';
 
+  // Strict check: Only intercept paths starting with /admin
   const isAdminRoute = pathname.startsWith('/admin') && pathname !== '/admin/login';
   const isLoginRoute = pathname === '/admin/login';
 
-  // Only apply to admin routes and login route
+  // If it's not an admin route or login route, completely bypass middleware
   if (!isAdminRoute && !isLoginRoute) {
     return NextResponse.next();
   }
+
+  const cookieHeader = request.headers.get('cookie') || '';
 
   // If no cookies are present at all
   if (!cookieHeader) {

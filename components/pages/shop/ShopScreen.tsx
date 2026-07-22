@@ -50,12 +50,9 @@ function normalizeFilters(searchParams: SearchParams = {}): Filters {
   }
 }
 
-function buildProductsUrl(filters: Filters) {
-  const backendUri = process.env.BACKEND_URI
-  if (!backendUri) {
-    throw new Error("Missing BACKEND_URI environment variable")
-  }
+import { getApiUrl } from "@/lib/config"
 
+function buildProductsUrl(filters: Filters) {
   const params = new URLSearchParams()
   params.set("page", String(filters.page))
   params.set("limit", String(PAGE_SIZE))
@@ -69,7 +66,7 @@ function buildProductsUrl(filters: Filters) {
   if (filters.size.trim()) params.set("size", filters.size.trim())
   if (filters.sort) params.set("sort", filters.sort)
 
-  return `${backendUri}/api/v1/products?${params.toString()}`
+  return `${getApiUrl("products")}?${params.toString()}`
 }
 
 function buildPageHref(filters: Filters, page: number) {
