@@ -1,57 +1,151 @@
+// Unified Response Envelopes
+export interface ApiResponse<T = any> {
+  success: boolean;
+  message: string;
+  data: T;
+  error?: string;
+}
+
+export interface Pagination {
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export interface PaginatedResponse<T = any> {
+  success: boolean;
+  message: string;
+  data: T[];
+  pagination: Pagination;
+  error?: string;
+}
+
+// Auth Types
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  is_active: boolean;
+  last_login?: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponseData {
+  user: User;
+}
+
+// Category Types
 export interface Category {
-  id: number;
+  id: string;
   name: string;
   slug: string;
   description: string;
-  image_url: string;
-  is_active: boolean;
   sort_order: number;
-  product_count: number;
+  is_active: boolean;
+  is_featured: boolean;
+  image_url?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
-export interface ProductCategory {
-  id: number;
+export interface CreateCategoryPayload {
   name: string;
-  slug: string;
   description: string;
-  image_url: string;
-  is_active: boolean;
   sort_order: number;
+  is_featured: boolean;
+  is_active?: boolean;
 }
 
-export interface ProductImage {
-  id: number;
-  image_url: string;
-  alt_text: string;
+export interface UpdateCategoryPayload {
+  name?: string;
+  description?: string;
+  sort_order?: number;
+  is_active?: boolean;
+  is_featured?: boolean;
+}
+
+// Product Types
+export interface ProductVariant {
+  sku: string;
+  name: string;
+  price: number;
+  stock: number;
+}
+
+export interface ProductMedia {
+  url: string;
+  alt: string;
   is_primary: boolean;
-  sort_order: number;
-  variant: number;
+}
+
+export interface ProductFAQ {
+  question: string;
+  answer: string;
 }
 
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   slug: string;
-  primary_category: ProductCategory;
-  primary_image: ProductImage | null;
-  short_description: string;
-  anti_tarnish: boolean;
+  category_slug: string;
+  description: string;
+  status: 'draft' | 'published' | 'archived';
   is_featured: boolean;
-  is_new_arrival: boolean;
-  is_best_seller: boolean;
-  price_from: string;
-  price_to: string | null;
-  price_display: string;
-  currency: string;
-  avg_rating: number;
-  review_count: number;
-  has_stock: boolean;
-  is_available_online: boolean;
+  is_most_sold: boolean;
+  variants: ProductVariant[];
+  media: ProductMedia[];
+  faqs: ProductFAQ[];
+  meta_title?: string;
+  meta_description?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
-export type ProductsResponse = {
-    count: number;
-    next: string | null;
-    previous: string | null;
-    results: Product[];
-};
+export interface CreateProductPayload {
+  name: string;
+  slug?: string;
+  category_slug: string;
+  description: string;
+  status: 'draft' | 'published' | 'archived';
+  is_featured: boolean;
+  is_most_sold: boolean;
+  variants: ProductVariant[];
+  media: ProductMedia[];
+  faqs: ProductFAQ[];
+  meta_title?: string;
+  meta_description?: string;
+}
+
+export type UpdateProductPayload = Partial<CreateProductPayload>;
+
+export interface ProductQueryParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: string;
+  status?: string;
+  is_featured?: boolean;
+  is_most_sold?: boolean;
+}
+
+// Inquiry Types
+export interface Inquiry {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+  status: 'pending' | 'in_progress' | 'resolved';
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface UpdateInquiryStatusPayload {
+  status: 'pending' | 'in_progress' | 'resolved';
+}

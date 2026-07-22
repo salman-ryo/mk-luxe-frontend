@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import ProductDetailsClient from "./ProductDetailsClient"
-import { getProductBySlug, type Product } from "@/lib/services/actions/products"
+import { getProductBySlug } from "@/lib/services/actions/products"
+import type { Product } from "@/types/api"
 
 type SearchParams = Record<string, string | string[] | undefined>
 

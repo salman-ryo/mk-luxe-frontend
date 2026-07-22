@@ -22,7 +22,7 @@ import {
 } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import type { Product, ProductVariant } from "@/lib/services/actions/products"
+import type { Product, ProductVariant } from "@/types/api"
 import { clientEnv } from "@/core/env.client"
 
 type WhatsAppIntent = "buy" | "enquire"
@@ -38,30 +38,21 @@ function formatINR(value: number) {
 function formatPrice(product: Product, variant?: ProductVariant | null) {
   if (variant?.price != null) return formatINR(variant.price)
 
-  if (product.price_display) return product.price_display
-
-  if (product.price_from != null && product.price_to != null) {
-    if (product.price_from === product.price_to) {
-      return formatINR(product.price_from)
-    }
-    return `${formatINR(product.price_from)} – ${formatINR(product.price_to)}`
+  const prices = product.variants?.map((v) => v.price).filter((p) => p !== undefined && p !== null) || []
+  if (!prices.length) return "Price on request"
+  const minPrice = Math.min(...prices)
+  const maxPrice = Math.max(...prices)
+  if (minPrice === maxPrice) {
+    return formatINR(minPrice)
   }
-
-  if (product.price_from != null) return `From ${formatINR(product.price_from)}`
-  if (product.price_to != null) return `Up to ${formatINR(product.price_to)}`
-
-  return "Price on request"
+  return `${formatINR(minPrice)} – ${formatINR(maxPrice)}`
 }
 
 function buildBadges(product: Product) {
   const badges: string[] = []
 
-  if (product.anti_tarnish) badges.push("Anti-tarnish")
-  if (product.water_resistant) badges.push("Water resistant")
-  if (product.sweat_resistant) badges.push("Sweat resistant")
-  if (product.hypoallergenic) badges.push("Hypoallergenic")
-  if (product.nickel_free) badges.push("Nickel free")
-  if (product.lightweight) badges.push("Lightweight")
+  if (product.is_featured) badges.push("Featured")
+  if (product.is_most_sold) badges.push("Bestseller")
   if (product.status) badges.push(product.status.charAt(0).toUpperCase() + product.status.slice(1))
 
   return badges
@@ -70,36 +61,21 @@ function buildBadges(product: Product) {
 function buildSpecItems(product: Product) {
   const items: Array<{ label: string; value: string }> = []
 
-  if (product.material) items.push({ label: "Material", value: product.material })
-  if (product.base_metal) items.push({ label: "Base metal", value: product.base_metal })
-  if (product.plating) items.push({ label: "Plating", value: product.plating })
-  if (product.finish) items.push({ label: "Finish", value: product.finish })
-  if (product.gemstone) items.push({ label: "Gemstone", value: product.gemstone })
-  if (product.color_family) items.push({ label: "Color family", value: product.color_family })
-
-  if (product.weight_grams != null) items.push({ label: "Weight", value: `${product.weight_grams} g` })
-  if (product.length_mm != null) items.push({ label: "Length", value: `${product.length_mm} mm` })
-  if (product.width_mm != null) items.push({ label: "Width", value: `${product.width_mm} mm` })
-
-  Object.entries(product.specifications ?? {}).forEach(([key, value]) => {
-    if (value == null || value === "") return
-    items.push({
-      label: key.replace(/_/g, " "),
-      value: String(value),
-    })
-  })
+  if (product.category_slug) {
+    items.push({ label: "Category", value: product.category_slug.toUpperCase() })
+  }
 
   return items
 }
 
 function getPrimaryImage(product: Product) {
-  if (product.images?.length) {
-    const primary = product.images.find((img) => img.is_primary && img.image_url)
-    if (primary?.image_url) return primary.image_url
-    const first = product.images.find((img) => img.image_url)
-    if (first?.image_url) return first.image_url
+  if (product.media?.length) {
+    const primary = product.media.find((img) => img.is_primary)
+    if (primary?.url) return primary.url
+    const first = product.media[0]
+    if (first?.url) return first.url
   }
-  return product.cover_image_url || "/placeholder.svg"
+  return "/placeholder.svg"
 }
 
 function buildWhatsAppMessage(params: {
@@ -128,7 +104,7 @@ function buildWhatsAppMessage(params: {
     "",
     `Product: ${product.name}`,
     `Slug: ${product.slug}`,
-    `Category: ${product.primary_category?.name || "Product"}`,
+    `Category: ${product.category_slug || "Product"}`,
     `Quantity: ${quantity}`,
     `Price: ${formatPrice(product, selectedVariant)}`,
   ]
@@ -136,10 +112,7 @@ function buildWhatsAppMessage(params: {
   if (selectedVariant) {
     lines.push(
       `Variant: ${selectedVariant.name}`,
-      `Variant SKU: ${selectedVariant.sku || "—"}`,
-      `Variant Material: ${selectedVariant.material || "—"}`,
-      `Variant Color: ${selectedVariant.color || "—"}`,
-      `Variant Size: ${selectedVariant.size || "—"}`
+      `Variant SKU: ${selectedVariant.sku || "—"}`
     )
   }
 
@@ -162,27 +135,29 @@ function getWhatsappNumber() {
 
 export default function ProductDetailsClient({ product }: { product: Product }) {
   const images = useMemo(() => {
-    const list = product.images?.filter((image) => image.image_url) ?? []
+    const list = product.media?.map((m, i) => ({
+      id: String(i),
+      image_url: m.url,
+      alt_text: m.alt || product.name,
+    })) ?? []
 
     if (list.length > 0) return list
 
     return [
       {
-        id: product.id,
+        id: "0",
         image_url: getPrimaryImage(product),
-        alt_text: product.alt_text || product.name,
-        is_primary: true,
-        sort_order: 0,
+        alt_text: product.name,
       },
     ]
   }, [product])
 
-  const variants = product.variants?.filter((variant) => variant.is_active !== false) ?? []
-  const defaultVariant = variants.find((variant) => variant.is_default) ?? variants[0] ?? null
+  const variants = product.variants ?? []
+  const defaultVariant = variants[0] ?? null
 
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
-  const [selectedVariantId, setSelectedVariantId] = useState<number | null>(defaultVariant?.id ?? null)
+  const [selectedVariantSku, setSelectedVariantSku] = useState<string | null>(defaultVariant?.sku ?? null)
   const [wishlisted, setWishlisted] = useState(false)
 
   const [isWhatsAppOpen, setIsWhatsAppOpen] = useState(false)
@@ -192,21 +167,19 @@ export default function ProductDetailsClient({ product }: { product: Product }) 
   const [customerMessage, setCustomerMessage] = useState("")
 
   const selectedVariant = useMemo(
-    () => variants.find((variant) => variant.id === selectedVariantId) ?? defaultVariant,
-    [defaultVariant, selectedVariantId, variants],
+    () => variants.find((variant) => variant.sku === selectedVariantSku) ?? defaultVariant,
+    [defaultVariant, selectedVariantSku, variants],
   )
 
   const displayPrice = formatPrice(product, selectedVariant)
-  const rating = typeof product.avg_rating === "number" ? product.avg_rating : 0
-  const reviewCount = product.review_count ?? 0
+  const rating = 5
+  const reviewCount = 0
 
-  const availableStock = selectedVariant?.available_stock ?? selectedVariant?.stock_quantity ?? 0
+  const availableStock = selectedVariant?.stock ?? 0
   const inStock = availableStock > 0
-  const lowStock =
-    selectedVariant?.is_low_stock ||
-    (selectedVariant?.low_stock_threshold != null ? availableStock <= selectedVariant.low_stock_threshold : availableStock <= 3)
+  const lowStock = availableStock <= 3
 
-  const categoryName = product.primary_category?.name || "Product"
+  const categoryName = product.category_slug || "Product"
   const badges = buildBadges(product)
   const specItems = buildSpecItems(product)
 
@@ -252,7 +225,7 @@ const pageUrl =
           <span>/</span>
           <Link href="/shop">Shop</Link>
           <span>/</span>
-          <Link href={`/shop?category=${encodeURIComponent(product.primary_category?.slug || "")}`}>
+          <Link href={`/shop?category=${encodeURIComponent(product.category_slug || "")}`}>
             {categoryName}
           </Link>
           <span>/</span>
@@ -265,7 +238,7 @@ const pageUrl =
           <div className="relative aspect-square overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
             <img
               src={images[selectedImage]?.image_url || getPrimaryImage(product)}
-              alt={images[selectedImage]?.alt_text || product.alt_text || product.name}
+              alt={images[selectedImage]?.alt_text || product.name}
               className="h-full w-full object-cover"
             />
 
@@ -322,20 +295,20 @@ const pageUrl =
                 {badge}
               </span>
             ))}
-            {product.is_available_online ? (
+            {product.is_featured ? (
               <span className="rounded-full border border-border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                Online
+                Featured
               </span>
             ) : null}
-            {product.is_available_at_stall ? (
+            {product.is_most_sold ? (
               <span className="rounded-full border border-border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                Stall
+                Most Sold
               </span>
             ) : null}
           </div>
 
           <p className="mb-6 max-w-2xl text-base leading-7 text-muted-foreground md:text-lg">
-            {product.short_description || product.seo_description || product.description}
+            {product.description || (product as any).short_description}
           </p>
 
           <div className="mb-6 flex flex-wrap items-center gap-3">
@@ -361,18 +334,9 @@ const pageUrl =
             <div className="flex flex-wrap items-end gap-3">
               <div className="text-3xl font-semibold tracking-tight">{displayPrice}</div>
               <div className="text-sm text-muted-foreground">
-                {product.price_display ? "Displayed price" : "Pricing available on request"}
+                Pricing based on available variants
               </div>
             </div>
-            {product.price_from != null || product.price_to != null ? (
-              <div className="mt-2 text-sm text-muted-foreground">
-                {product.price_from != null && product.price_to != null
-                  ? `Range: ${formatINR(product.price_from)} – ${formatINR(product.price_to)}`
-                  : product.price_from != null
-                    ? `From ${formatINR(product.price_from)}`
-                    : `Up to ${formatINR(product.price_to as number)}`}
-              </div>
-            ) : null}
           </div>
 
           <div className="mb-8 space-y-6">
@@ -398,14 +362,14 @@ const pageUrl =
                     )
                   }
 
-                  const active = variant.id === selectedVariantId
-                  const stock = variant.available_stock ?? variant.stock_quantity ?? 0
+                  const active = variant.sku === selectedVariantSku
+                  const stock = variant.stock ?? 0
 
                   return (
                     <button
-                      key={variant.id}
+                      key={variant.sku}
                       type="button"
-                      onClick={() => setSelectedVariantId(variant.id)}
+                      onClick={() => setSelectedVariantSku(variant.sku)}
                       className={`rounded-2xl border p-4 text-left transition ${
                         active
                           ? "border-primary bg-primary/5 ring-2 ring-primary/10"
@@ -416,7 +380,7 @@ const pageUrl =
                         <div>
                           <div className="text-sm font-semibold">{variant.name}</div>
                           <div className="mt-1 text-xs text-muted-foreground">
-                            {[variant.material, variant.color, variant.size].filter(Boolean).join(" • ") || "Single variant"}
+                            Single variant
                           </div>
                         </div>
                         <div className="text-right">
@@ -490,11 +454,11 @@ const pageUrl =
             </div>
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
               <RotateCcw className="h-5 w-5 text-primary" />
-              {product.return_window_days ? `${product.return_window_days}-day returns` : "Return support available"}
+              Return support available
             </div>
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
               <Truck className="h-5 w-5 text-primary" />
-              {product.delivery_note || "Fast dispatch after order confirmation"}
+              Fast dispatch after order confirmation
             </div>
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
               <Droplets className="h-5 w-5 text-primary" /> Easy maintenance
@@ -507,24 +471,10 @@ const pageUrl =
         <div className="lg:col-span-2">
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Product details</h2>
           <p className="mb-6 max-w-3xl leading-7 text-muted-foreground">
-            {product.description || product.short_description || "No description available."}
+            {product.description || "No description available."}
           </p>
 
-          {product.what_you_get?.length ? (
-            <div className="mb-8 rounded-2xl border border-border bg-card p-5">
-              <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                What you get
-              </h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                {product.what_you_get.map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-primary" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
+          {false ? null : null}
 
           <div className="mb-8 grid gap-4 md:grid-cols-2">
             <div className="rounded-2xl border border-border bg-card p-5">
@@ -577,7 +527,7 @@ const pageUrl =
               Care instructions
             </h3>
             <p className="text-sm leading-7 text-muted-foreground">
-              {product.care_instructions || "Handle with care and store in a dry pouch after use."}
+              Handle with care and store in a dry pouch after use.
             </p>
           </div>
         </div>
@@ -593,24 +543,8 @@ const pageUrl =
                 <span className="text-right text-foreground">{categoryName}</span>
               </div>
               <div className="flex items-start justify-between gap-4">
-                <span className="shrink-0">Material</span>
-                <span className="text-right text-foreground">{product.material || "—"}</span>
-              </div>
-              <div className="flex items-start justify-between gap-4">
-                <span className="shrink-0">Finish</span>
-                <span className="text-right text-foreground">{product.finish || "—"}</span>
-              </div>
-              <div className="flex items-start justify-between gap-4">
-                <span className="shrink-0">Availability</span>
-                <span className="text-right text-foreground">
-                  {product.is_available_online && product.is_available_at_stall
-                    ? "Online + stall"
-                    : product.is_available_online
-                      ? "Online"
-                      : product.is_available_at_stall
-                        ? "Stall"
-                        : "Unavailable"}
-                </span>
+                <span className="shrink-0">Status</span>
+                <span className="text-right text-foreground uppercase">{product.status || "—"}</span>
               </div>
             </div>
           </div>
@@ -622,19 +556,15 @@ const pageUrl =
             <div className="space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-3">
                 <Truck className="h-4 w-4 text-primary" />
-                <span>{product.delivery_note || "Delivery details will be shown at checkout."}</span>
+                <span>Delivery details will be shown at checkout.</span>
               </div>
               <div className="flex items-center gap-3">
                 <RotateCcw className="h-4 w-4 text-primary" />
-                <span>
-                  {product.return_window_days
-                    ? `${product.return_window_days}-day return window`
-                    : "Return policy shown at checkout"}
-                </span>
+                <span>Return policy shown at checkout</span>
               </div>
               <div className="flex items-center gap-3">
                 <ShieldCheck className="h-4 w-4 text-primary" />
-                <span>{product.stall_note || "Secure packaging and payment support"}</span>
+                <span>Secure packaging and payment support</span>
               </div>
             </div>
           </div>
@@ -670,15 +600,12 @@ const pageUrl =
             <AccordionContent className="text-sm leading-7 text-muted-foreground">
               {product.faqs?.length ? (
                 <div className="space-y-4">
-                  {product.faqs
-                    .filter((faq) => faq.is_active !== false)
-                    .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
-                    .map((faq) => (
-                      <div key={faq.id} className="rounded-xl border border-border bg-background p-4">
-                        <div className="mb-1 text-sm font-semibold text-foreground">{faq.question}</div>
-                        <p>{faq.answer}</p>
-                      </div>
-                    ))}
+                  {product.faqs.map((faq, idx) => (
+                    <div key={idx} className="rounded-xl border border-border bg-background p-4">
+                      <div className="mb-1 text-sm font-semibold text-foreground">{faq.question}</div>
+                      <p>{faq.answer}</p>
+                    </div>
+                  ))}
                 </div>
               ) : (
                 "FAQ content is not available for this product yet."
@@ -708,7 +635,7 @@ const pageUrl =
           </div>
           <div className="flex md:justify-end">
             <Button asChild variant="champagneGold">
-              <Link href={`/shop?category=${encodeURIComponent(product.primary_category?.slug || "")}`}>
+              <Link href={`/shop?category=${encodeURIComponent(product.category_slug || "")}`}>
                 Explore category <ChevronRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
@@ -721,8 +648,7 @@ const pageUrl =
       <div className="sticky bottom-4 z-20 mt-12 rounded-2xl border border-border bg-background/95 p-3 shadow-lg backdrop-blur md:hidden">
         <div className="mb-2 flex items-center justify-between text-sm">
           <span className="text-muted-foreground">
-            {selectedVariant?.material || product.material || "Product"}
-            {selectedVariant?.size ? ` • ${selectedVariant.size}` : ""}
+            {selectedVariant?.name || product.name || "Product"}
           </span>
           <span className="font-semibold">{displayPrice}</span>
         </div>

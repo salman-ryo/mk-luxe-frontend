@@ -18,17 +18,21 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
   },
 }
+import { Providers } from "@/components/providers"
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" style={{ colorScheme: 'dark' }}>
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased min-h-screen flex flex-col`}>
-        <Navbar />
-        <main className="grow">{children}</main>
-        <Footer />
+        <Providers>
+          <Navbar />
+          <main className="grow">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   )

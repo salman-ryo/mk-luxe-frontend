@@ -2,35 +2,8 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Filter, LayoutGrid, RefreshCw } from "lucide-react"
 import ShopFilters from "./ShopFilters"
+import type { Product, PaginatedResponse } from "@/types/api"
 
-type ApiProduct = {
-  id?: number | string
-  slug?: string
-  name?: string
-
-  price_range?: string | null
-  price_from?: string | number | null
-  price_to?: string | number | null
-  currency?: string | null
-
-  // ❗ ADD THIS
-  primary_image?: {
-    image_url?: string | null
-    alt_text?: string | null
-    is_primary?: boolean
-  }
-
-  // (optional fallback if future APIs change)
-  cover_image_url?: string | null
-  images?: Array<{
-    image_url?: string | null
-    alt_text?: string | null
-    is_primary?: boolean
-  }>
-
-  avg_rating?: number | string | null
-  review_count?: number | null
-}
 type SearchParams = Record<string, string | string[] | undefined>
 
 type Filters = {
@@ -85,9 +58,9 @@ function buildProductsUrl(filters: Filters) {
 
   const params = new URLSearchParams()
   params.set("page", String(filters.page))
-  params.set("page_size", String(PAGE_SIZE))
+  params.set("limit", String(PAGE_SIZE))
 
-  if (filters.q.trim()) params.set("search", filters.q.trim()) // rename if your API expects a different keyword param
+  if (filters.q.trim()) params.set("search", filters.q.trim())
   if (filters.category.trim()) params.set("category", filters.category.trim())
   if (filters.minPrice.trim()) params.set("min_price", filters.minPrice.trim())
   if (filters.maxPrice.trim()) params.set("max_price", filters.maxPrice.trim())
@@ -96,7 +69,7 @@ function buildProductsUrl(filters: Filters) {
   if (filters.size.trim()) params.set("size", filters.size.trim())
   if (filters.sort) params.set("sort", filters.sort)
 
-  return `${backendUri}/api/v1/products/?${params.toString()}`
+  return `${backendUri}/api/v1/products?${params.toString()}`
 }
 
 function buildPageHref(filters: Filters, page: number) {
@@ -116,44 +89,36 @@ function buildPageHref(filters: Filters, page: number) {
   return query ? `/shop?${query}` : "/shop"
 }
 
-function formatPrice(product: ApiProduct) {
-  if (product.price_range) return product.price_range
-
-  const currency = product.currency || "INR"
-  const from = product.price_from
-  const to = product.price_to
-
-  if (from != null && to != null && String(from) !== String(to)) {
-    return `${currency} ${from} - ${to}`
-  }
-
-  if (from != null) return `${currency} ${from}`
-  if (to != null) return `${currency} ${to}`
-
-  return "Price on request"
+function formatINR(value: number) {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(value)
 }
 
-function getImageUrl(product: ApiProduct) {
-  // ✅ correct source
-  if (product.primary_image?.image_url) {
-    return product.primary_image.image_url
+function formatPrice(product: Product) {
+  const prices = product.variants?.map(v => v.price).filter(p => p !== undefined && p !== null) || []
+  if (!prices.length) return "Price on request"
+  const minPrice = Math.min(...prices)
+  const maxPrice = Math.max(...prices)
+  if (minPrice === maxPrice) {
+    return formatINR(minPrice)
   }
+  return `${formatINR(minPrice)} - ${formatINR(maxPrice)}`
+}
 
-  // fallback (future-proof)
-  if (product.cover_image_url) return product.cover_image_url
-
-  const primaryImage = product.images?.find(
-    (image) => image?.is_primary && image.image_url
-  )
-  if (primaryImage?.image_url) return primaryImage.image_url
-
-  const firstImage = product.images?.find((image) => image?.image_url)
-  if (firstImage?.image_url) return firstImage.image_url
-
+function getImageUrl(product: Product) {
+  if (product.media?.length) {
+    const primary = product.media.find((m) => m.is_primary)
+    if (primary?.url) return primary.url
+    const first = product.media[0]
+    if (first?.url) return first.url
+  }
   return "/placeholder.svg"
 }
 
-function getProductHref(product: ApiProduct) {
+function getProductHref(product: Product) {
   if (product.slug) return `/product/${product.slug}`
   if (product.id != null) return `/product/${product.id}`
   return "/shop"
@@ -190,23 +155,24 @@ async function getProducts(filters: Filters) {
     if (!response.ok) {
       const message = data?.detail || data?.message || `Failed to load products (${response.status})`
       return {
-        products: [] as ApiProduct[],
+        products: [] as Product[],
         count: 0,
         error: message as string,
       }
     }
 
-    const results = Array.isArray(data) ? data : data?.results ?? []
-    const count = Array.isArray(data) ? results.length : Number(data?.count ?? results.length)
+    const responseData = data as PaginatedResponse<Product>
+    const results = responseData?.data || []
+    const count = responseData?.pagination?.total || 0
 
     return {
-      products: results as ApiProduct[],
+      products: results,
       count,
       error: null as string | null,
     }
   } catch (error) {
     return {
-      products: [] as ApiProduct[],
+      products: [] as Product[],
       count: 0,
       error: error instanceof Error ? error.message : "Something went wrong while loading products.",
     }
@@ -290,7 +256,7 @@ export default async function ShopScreen({ searchParams }: { searchParams?: Sear
                 {products.map((product) => {
                   const image = getImageUrl(product)
                   const href = getProductHref(product)
-                  const rating = Number(product.avg_rating || 0)
+                  const rating = Number((product as any).avg_rating || 5)
                   const filledStars = Math.max(0, Math.min(5, Math.round(rating)))
 
                   return (

@@ -229,36 +229,54 @@ export default function BestsellersCarousel({ products }: Props) {
           '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
         ].join(' ')}
       >
-        {products.map((product) => (
-          <div
-            key={product.id}
-            className="relative group overflow-hidden bg-deep-slate border border-border p-8 flex items-center gap-8 rounded-lg lg:shrink-0 lg:w-95"
-          >
-            <div className="shrink-0">
-              <Image
-                src={product.primary_image?.image_url || '/placeholder.svg'}
-                alt={product.primary_image?.alt_text ?? product.name}
-                width={400}
-                height={400}
-                className="w-auto h-32 object-cover group-hover:scale-105 transition-transform duration-500 rounded"
-              />
-            </div>
+        {products.map((product) => {
+          const primaryMedia = product.media?.find((m) => m.is_primary) || product.media?.[0];
+          const imageUrl = primaryMedia?.url || '/placeholder.svg';
+          const altText = primaryMedia?.alt || product.name;
 
-            <div className="w-1/2">
-              <h3 className="text-base font-serif mb-2 uppercase">{product.name}</h3>
-              <p className="text-primary font-bold mb-6">{product.price_display}</p>
+          const prices = product.variants?.map((v) => v.price).filter((p) => p !== undefined && p !== null) || [];
+          const minPrice = prices.length ? Math.min(...prices) : 0;
+          const maxPrice = prices.length ? Math.max(...prices) : 0;
+          const formatINR = (value: number) => {
+            return new Intl.NumberFormat('en-IN', {
+              style: 'currency',
+              currency: 'INR',
+              maximumFractionDigits: 0,
+            }).format(value);
+          };
+          const priceDisplay = minPrice === maxPrice ? formatINR(minPrice) : `${formatINR(minPrice)} - ${formatINR(maxPrice)}`;
 
-              <Link
-                href={`/product/${product.slug}`}
-                aria-label={`Buy ${product.name} now`}
-                className="inline-flex items-center gap-2 border border-primary px-6 py-2 text-[10px] uppercase tracking-widest font-bold hover:bg-primary hover:text-black transition-colors"
-              >
-                Buy Now
-                <ArrowRight className="w-3 h-3" />
-              </Link>
+          return (
+            <div
+              key={product.id}
+              className="relative group overflow-hidden bg-deep-slate border border-border p-8 flex items-center gap-8 rounded-lg lg:shrink-0 lg:w-95"
+            >
+              <div className="shrink-0">
+                <Image
+                  src={imageUrl}
+                  alt={altText}
+                  width={400}
+                  height={400}
+                  className="w-auto h-32 object-cover group-hover:scale-105 transition-transform duration-500 rounded"
+                />
+              </div>
+
+              <div className="w-1/2">
+                <h3 className="text-base font-serif mb-2 uppercase">{product.name}</h3>
+                <p className="text-primary font-bold mb-6">{priceDisplay}</p>
+
+                <Link
+                  href={`/product/${product.slug}`}
+                  aria-label={`Buy ${product.name} now`}
+                  className="inline-flex items-center gap-2 border border-primary px-6 py-2 text-[10px] uppercase tracking-widest font-bold hover:bg-primary hover:text-black transition-colors"
+                >
+                  Buy Now
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </>
   );

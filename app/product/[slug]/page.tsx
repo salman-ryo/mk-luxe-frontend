@@ -22,13 +22,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       }
     }
 
+    const primaryMedia = product.media?.find((m) => m.is_primary) || product.media?.[0]
+    const imageUrl = primaryMedia?.url
+    const description = product.meta_description || product.description || undefined
+    const title = product.meta_title || product.name
+
     return {
-      title: product.seo_title || product.name,
-      description: product.seo_description || product.short_description || product.description || undefined,
+      title,
+      description,
       openGraph: {
-        title: product.seo_title || product.name,
-        description: product.seo_description || product.short_description || product.description || undefined,
-        images: product.cover_image_url ? [product.cover_image_url] : undefined,
+        title,
+        description,
+        images: imageUrl ? [imageUrl] : undefined,
       },
     }
   } catch {
