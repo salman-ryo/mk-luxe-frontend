@@ -59,6 +59,7 @@ export interface CreateCategoryPayload {
   sort_order: number;
   is_featured: boolean;
   is_active?: boolean;
+  image_url?: string;
 }
 
 export interface UpdateCategoryPayload {
@@ -67,6 +68,7 @@ export interface UpdateCategoryPayload {
   sort_order?: number;
   is_active?: boolean;
   is_featured?: boolean;
+  image_url?: string;
 }
 
 // Product Types

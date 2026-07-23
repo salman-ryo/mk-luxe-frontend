@@ -41,6 +41,7 @@ const categorySchema = z.object({
   sort_order: z.preprocess((val) => Number(val), z.number().min(0, 'Sort order must be non-negative')),
   is_featured: z.boolean().default(false),
   is_active: z.boolean().default(true),
+  image_url: z.string().optional().default(''),
 });
 
 type CategoryFormData = z.infer<typeof categorySchema>;
@@ -90,6 +91,7 @@ export default function CategoriesPage() {
       sort_order: categories.length + 1,
       is_featured: false,
       is_active: true,
+      image_url: '',
     });
     setIsCreateOpen(true);
   };
@@ -102,6 +104,7 @@ export default function CategoriesPage() {
       sort_order: category.sort_order,
       is_featured: category.is_featured,
       is_active: category.is_active ?? true,
+      image_url: category.image_url || '',
     });
     setIsCreateOpen(true);
   };
@@ -247,7 +250,20 @@ export default function CategoriesPage() {
                   #{category.sort_order}
                 </TableCell>
                 <TableCell className="font-semibold text-foreground">
-                  {category.name}
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-md overflow-hidden border border-border flex items-center justify-center bg-muted/40 shrink-0">
+                      {category.image_url ? (
+                        <img
+                          src={category.image_url}
+                          alt={category.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <FolderTree className="w-5 h-5 text-muted-foreground/60" />
+                      )}
+                    </div>
+                    <span>{category.name}</span>
+                  </div>
                 </TableCell>
                 <TableCell className="font-mono text-xs text-muted-foreground">
                   {category.slug}
@@ -341,6 +357,19 @@ export default function CategoriesPage() {
             />
             {form.formState.errors.description && (
               <p className="text-xs text-red-400 font-medium">{form.formState.errors.description.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Image URL
+            </label>
+            <Input
+              {...form.register('image_url')}
+              placeholder="e.g. /images/categories/bracelets.png or https://..."
+            />
+            {form.formState.errors.image_url && (
+              <p className="text-xs text-red-400 font-medium">{form.formState.errors.image_url.message}</p>
             )}
           </div>
 
