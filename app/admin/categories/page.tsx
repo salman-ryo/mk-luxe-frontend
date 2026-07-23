@@ -34,6 +34,8 @@ import {
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
+import { ImageUploader } from '@/components/admin/image-uploader';
+import { uploadToR2 } from '@/lib/upload';
 
 const categorySchema = z.object({
   name: z.string().min(1, 'Category name is required'),
@@ -52,6 +54,8 @@ export default function CategoriesPage() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [deletingCategory, setDeletingCategory] = useState<Category | null>(null);
+  const [uploadingCount, setUploadingCount] = useState(0);
+  const [categoryFile, setCategoryFile] = useState<File | null>(null);
 
   // Fetch Categories
   const { data: categoriesResponse, isLoading, isError, isFetching } = useQuery({
@@ -85,6 +89,7 @@ export default function CategoriesPage() {
   // Reset form when modal opens/closes
   const handleOpenCreate = () => {
     setEditingCategory(null);
+    setCategoryFile(null);
     form.reset({
       name: '',
       description: '',
@@ -98,6 +103,7 @@ export default function CategoriesPage() {
 
   const handleOpenEdit = (category: Category) => {
     setEditingCategory(category);
+    setCategoryFile(null);
     form.reset({
       name: category.name,
       description: category.description,
@@ -161,11 +167,39 @@ export default function CategoriesPage() {
     },
   });
 
-  const onSubmitForm = (data: CategoryFormData) => {
+  const onSubmitForm = async (data: CategoryFormData) => {
+    let finalImageUrl = data.image_url;
+    if (categoryFile) {
+      try {
+        setUploadingCount(1);
+        const fileExt = categoryFile.name.split('.').pop() || 'webp';
+        const nameSlug = (editingCategory?.slug || data.name)
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '');
+        const objectKey = `categories/${nameSlug}.${fileExt}`;
+
+        const publicUrl = await uploadToR2(categoryFile, undefined, objectKey);
+        finalImageUrl = publicUrl;
+        setCategoryFile(null);
+      } catch (err) {
+        // uploadToR2 handles error toast
+        setUploadingCount(0);
+        return;
+      } finally {
+        setUploadingCount(0);
+      }
+    }
+
+    const payload = {
+      ...data,
+      image_url: finalImageUrl,
+    };
+
     if (editingCategory) {
-      updateMutation.mutate({ id: editingCategory.id, payload: data });
+      updateMutation.mutate({ id: editingCategory.id, payload });
     } else {
-      createMutation.mutate(data);
+      createMutation.mutate(payload);
     }
   };
 
@@ -361,12 +395,13 @@ export default function CategoriesPage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Image URL
-            </label>
-            <Input
-              {...form.register('image_url')}
-              placeholder="e.g. /images/categories/bracelets.png or https://..."
+            <ImageUploader
+              label="Category Image"
+              value={form.watch('image_url') || ''}
+              onChange={(url, file) => {
+                form.setValue('image_url', url, { shouldValidate: true });
+                setCategoryFile(file || null);
+              }}
             />
             {form.formState.errors.image_url && (
               <p className="text-xs text-red-400 font-medium">{form.formState.errors.image_url.message}</p>
@@ -418,11 +453,16 @@ export default function CategoriesPage() {
             >
               Cancel
             </Button>
-            <Button type="submit" variant="champagneGold" disabled={isSaving}>
+            <Button type="submit" variant="champagneGold" disabled={isSaving || uploadingCount > 0}>
               {isSaving ? (
                 <span className="flex items-center space-x-2">
                   <Loader2 className="w-4 h-4 animate-spin" />
                   <span>Saving...</span>
+                </span>
+              ) : uploadingCount > 0 ? (
+                <span className="flex items-center space-x-2">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Uploading image...</span>
                 </span>
               ) : editingCategory ? (
                 'Update Category'

@@ -34,6 +34,9 @@ import {
   FileJson,
 } from 'lucide-react';
 import { JsonProductModal } from '@/components/admin/json-product-modal';
+import { ImageUploader } from '@/components/admin/image-uploader';
+import { BulkImageUploader } from '@/components/admin/bulk-image-uploader';
+import { uploadToR2 } from '@/lib/upload';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -104,6 +107,8 @@ export default function ProductsPage() {
   const [isJsonModalOpen, setIsJsonModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
+  const [uploadingCount, setUploadingCount] = useState(0);
+  const [productFiles, setProductFiles] = useState<Record<string, File>>({});
 
   // Debounce search input
   useEffect(() => {
@@ -171,6 +176,7 @@ export default function ProductsPage() {
   // Open Create Form Drawer
   const handleOpenCreate = () => {
     setEditingProduct(null);
+    setProductFiles({});
     form.reset({
       name: '',
       slug: '',
@@ -191,6 +197,7 @@ export default function ProductsPage() {
   // Open Edit Form Drawer
   const handleOpenEdit = (product: Product) => {
     setEditingProduct(product);
+    setProductFiles({});
     form.reset({
       name: product.name,
       slug: product.slug,
@@ -266,11 +273,53 @@ export default function ProductsPage() {
     },
   });
 
-  const onSubmitForm = (data: ProductFormData) => {
+  const onSubmitForm = async (data: ProductFormData) => {
+    // Media items array copy
+    const mediaItems = data.media ? [...data.media] : [];
+    const filesToUpload: Array<{ index: number; file: File }> = [];
+
+    mediaItems.forEach((item, index) => {
+      if (item.url.startsWith('blob:') && productFiles[item.url]) {
+        filesToUpload.push({
+          index,
+          file: productFiles[item.url],
+        });
+      }
+    });
+
+    if (filesToUpload.length > 0) {
+      try {
+        setUploadingCount(filesToUpload.length);
+
+        // Upload all files in parallel
+        const uploadPromises = filesToUpload.map(async ({ index, file }) => {
+          const publicUrl = await uploadToR2(file);
+          mediaItems[index] = {
+            ...mediaItems[index],
+            url: publicUrl,
+          };
+        });
+
+        await Promise.all(uploadPromises);
+        setProductFiles({});
+      } catch (err) {
+        // uploadToR2 handles toast errors
+        setUploadingCount(0);
+        return;
+      } finally {
+        setUploadingCount(0);
+      }
+    }
+
+    const payload = {
+      ...data,
+      media: mediaItems,
+    };
+
     if (editingProduct) {
-      updateMutation.mutate({ id: editingProduct.id, payload: data });
+      updateMutation.mutate({ id: editingProduct.id, payload });
     } else {
-      createMutation.mutate(data);
+      createMutation.mutate(payload);
     }
   };
 
@@ -724,9 +773,22 @@ export default function ProductsPage() {
                   })
                 }
               >
-                <Plus className="w-3.5 h-3.5 mr-1" /> Add Image URL
+                <Plus className="w-3.5 h-3.5 mr-1" /> Add URL Field
               </Button>
             </div>
+
+            <BulkImageUploader
+              onFilesSelected={(selected) => {
+                selected.forEach(({ url, file }) => {
+                  setProductFiles((prev) => ({ ...prev, [url]: file }));
+                  mediaField.append({
+                    url,
+                    alt: '',
+                    is_primary: mediaField.fields.length === 0,
+                  });
+                });
+              }}
+            />
 
             {mediaField.fields.map((field, index) => {
               const currentUrl = form.watch(`media.${index}.url`);
@@ -770,12 +832,15 @@ export default function ProductsPage() {
                     <div className="flex-1 space-y-3 w-full">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-2 items-end">
                         <div className="md:col-span-2">
-                          <label className="text-[10px] font-semibold uppercase text-muted-foreground">
-                            Image URL
-                          </label>
-                          <Input
-                            {...form.register(`media.${index}.url`)}
-                            placeholder="https://example.com/image.jpg"
+                          <ImageUploader
+                            value={form.watch(`media.${index}.url`)}
+                            onChange={(url, file) => {
+                              form.setValue(`media.${index}.url`, url, { shouldValidate: true });
+                              if (file) {
+                                setProductFiles((prev) => ({ ...prev, [url]: file }));
+                              }
+                            }}
+                            placeholder="Upload file or enter URL..."
                           />
                         </div>
                         <div>
@@ -883,11 +948,16 @@ export default function ProductsPage() {
             >
               Cancel
             </Button>
-            <Button type="submit" variant="champagneGold" disabled={isSaving}>
+            <Button type="submit" variant="champagneGold" disabled={isSaving || uploadingCount > 0}>
               {isSaving ? (
                 <span className="flex items-center space-x-2">
                   <Loader2 className="w-4 h-4 animate-spin" />
                   <span>Saving Product...</span>
+                </span>
+              ) : uploadingCount > 0 ? (
+                <span className="flex items-center space-x-2">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Uploading images ({uploadingCount})...</span>
                 </span>
               ) : editingProduct ? (
                 'Update Product'
