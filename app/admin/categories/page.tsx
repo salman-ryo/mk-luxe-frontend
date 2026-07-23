@@ -368,10 +368,11 @@ export default function CategoriesPage() {
 
         <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-4 py-2">
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Category Name
+            <label htmlFor="cat-name" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Category Name *
             </label>
             <Input
+              id="cat-name"
               {...form.register('name')}
               placeholder="e.g. Luxury Timepieces"
             />
@@ -381,10 +382,11 @@ export default function CategoriesPage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Description
+            <label htmlFor="cat-desc" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Description *
             </label>
             <Textarea
+              id="cat-desc"
               {...form.register('description')}
               placeholder="Provide a detailed overview of this luxury collection..."
               rows={3}
@@ -409,10 +411,11 @@ export default function CategoriesPage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Sort Order Index
+            <label htmlFor="cat-sort" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Sort Order Index *
             </label>
             <Input
+              id="cat-sort"
               type="number"
               {...form.register('sort_order')}
               placeholder="1"
@@ -423,22 +426,24 @@ export default function CategoriesPage() {
           </div>
 
           <div className="flex items-center justify-between p-3 border rounded-lg bg-muted/20">
-            <div>
-              <p className="text-sm font-semibold text-foreground">Featured Collection</p>
-              <p className="text-xs text-muted-foreground">Highlight on homepage showcase</p>
-            </div>
+            <label htmlFor="cat-featured" className="cursor-pointer flex-1">
+              <span className="text-sm font-semibold text-foreground block">Featured Collection</span>
+              <span className="text-xs text-muted-foreground block">Highlight on homepage showcase</span>
+            </label>
             <Switch
+              id="cat-featured"
               checked={form.watch('is_featured')}
               onCheckedChange={(checked) => form.setValue('is_featured', checked)}
             />
           </div>
 
           <div className="flex items-center justify-between p-3 border rounded-lg bg-muted/20">
-            <div>
-              <p className="text-sm font-semibold text-foreground">Active Status</p>
-              <p className="text-xs text-muted-foreground">Visible to customers in shop</p>
-            </div>
+            <label htmlFor="cat-active" className="cursor-pointer flex-1">
+              <span className="text-sm font-semibold text-foreground block">Active Status</span>
+              <span className="text-xs text-muted-foreground block">Visible to customers in shop</span>
+            </label>
             <Switch
+              id="cat-active"
               checked={form.watch('is_active')}
               onCheckedChange={(checked) => form.setValue('is_active', checked)}
             />

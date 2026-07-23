@@ -3,15 +3,13 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-export interface SwitchProps {
+export interface SwitchProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   checked?: boolean
   onCheckedChange?: (checked: boolean) => void
-  disabled?: boolean
-  className?: string
 }
 
 const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
-  ({ className, checked, onCheckedChange, disabled, ...props }, ref) => {
+  ({ className, checked, onCheckedChange, disabled, type = "button", ...props }, ref) => {
     const handleToggle = () => {
       if (!disabled) {
         onCheckedChange?.(!checked)

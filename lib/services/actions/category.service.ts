@@ -5,7 +5,7 @@ import type { Category, ApiResponse } from "@/types/api";
 const CATEGORIES_REVALIDATE_SECONDS = 3_600;
 
 export async function getCategories(): Promise<Category[]> {
-  const res = await fetch(getApiUrl("categories"), {
+  const res = await fetch(getApiUrl("?is_featured=true"), {
     next: {
       revalidate: CATEGORIES_REVALIDATE_SECONDS,
       tags: ["categories"],

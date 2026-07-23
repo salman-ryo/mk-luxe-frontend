@@ -49,14 +49,8 @@ export function Sidebar() {
       {/* Brand Header */}
       <div className="h-16 px-6 border-b flex items-center justify-between">
         <Link href="/admin/dashboard" className="flex items-center space-x-3 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-slate-950 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
-            <Gem className="w-5 h-5" />
-          </div>
           <div>
-            <h1 className="font-bold text-base tracking-wide bg-gradient-to-r from-amber-400 via-amber-200 to-amber-500 bg-clip-text text-transparent">
-              MK LUXE
-            </h1>
-            <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest">
+            <p className="text-xl font-medium text-muted-foreground uppercase tracking-widest">
               Admin Portal
             </p>
           </div>

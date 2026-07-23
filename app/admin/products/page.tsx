@@ -565,7 +565,7 @@ export default function ProductsPage() {
       )}
 
       {/* Product Drawer Sheet (Create / Edit Form) */}
-      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen} className="max-w-full sm:max-w-xl md:max-w-3xl lg:max-w-4xl">
         <SheetHeader>
           <SheetTitle>{editingProduct ? 'Edit Product' : 'Add New Product'}</SheetTitle>
           <SheetDescription>
@@ -584,29 +584,30 @@ export default function ProductsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                <label htmlFor="prod-name" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   Product Name *
                 </label>
-                <Input {...form.register('name')} placeholder="e.g. Royal Chronograph 44" />
+                <Input id="prod-name" {...form.register('name')} placeholder="e.g. Royal Chronograph 44" />
                 {form.formState.errors.name && (
                   <p className="text-xs text-red-400">{form.formState.errors.name.message}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                <label htmlFor="prod-slug" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   Custom Slug (Optional)
                 </label>
-                <Input {...form.register('slug')} placeholder="auto-generated-if-empty" />
+                <Input id="prod-slug" {...form.register('slug')} placeholder="auto-generated-if-empty" />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                <label htmlFor="prod-category" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   Category *
                 </label>
                 <select
+                  id="prod-category"
                   {...form.register('category_slug')}
                   className="w-full bg-[#0a0a0c] border border-border px-3 py-2 text-sm focus:outline-none focus:border-primary rounded-md text-foreground cursor-pointer"
                 >
@@ -623,10 +624,11 @@ export default function ProductsPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                <label htmlFor="prod-status" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   Status *
                 </label>
                 <select
+                  id="prod-status"
                   {...form.register('status')}
                   className="w-full bg-[#0a0a0c] border border-border px-3 py-2 text-sm focus:outline-none focus:border-primary rounded-md text-foreground cursor-pointer"
                 >
@@ -638,10 +640,11 @@ export default function ProductsPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <label htmlFor="prod-desc" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 Description *
               </label>
               <Textarea
+                id="prod-desc"
                 {...form.register('description')}
                 placeholder="Full description of craftsmanship, materials, and luxury features..."
                 rows={4}
@@ -659,22 +662,24 @@ export default function ProductsPage() {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center justify-between p-3 border rounded-lg bg-muted/20">
-                <div>
-                  <p className="text-sm font-semibold">Is Featured</p>
-                  <p className="text-xs text-muted-foreground">Showcase on main feature slider</p>
-                </div>
+                <label htmlFor="prod-featured" className="cursor-pointer flex-1">
+                  <span className="text-sm font-semibold text-foreground block">Is Featured</span>
+                  <span className="text-xs text-muted-foreground block">Showcase on main feature slider</span>
+                </label>
                 <Switch
+                  id="prod-featured"
                   checked={form.watch('is_featured')}
                   onCheckedChange={(checked) => form.setValue('is_featured', checked)}
                 />
               </div>
 
               <div className="flex items-center justify-between p-3 border rounded-lg bg-muted/20">
-                <div>
-                  <p className="text-sm font-semibold">Is Most Sold</p>
-                  <p className="text-xs text-muted-foreground">Badge as best seller</p>
-                </div>
+                <label htmlFor="prod-most-sold" className="cursor-pointer flex-1">
+                  <span className="text-sm font-semibold text-foreground block">Is Most Sold</span>
+                  <span className="text-xs text-muted-foreground block">Badge as best seller</span>
+                </label>
                 <Switch
+                  id="prod-most-sold"
                   checked={form.watch('is_most_sold')}
                   onCheckedChange={(checked) => form.setValue('is_most_sold', checked)}
                 />
@@ -718,22 +723,23 @@ export default function ProductsPage() {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pr-6">
                   <div>
-                    <label className="text-[10px] font-semibold uppercase text-muted-foreground">
+                    <label htmlFor={`var-sku-${index}`} className="text-[10px] font-semibold uppercase text-muted-foreground block mb-1">
                       SKU
                     </label>
-                    <Input {...form.register(`variants.${index}.sku`)} placeholder="SKU-001" />
+                    <Input id={`var-sku-${index}`} {...form.register(`variants.${index}.sku`)} placeholder="SKU-001" />
                   </div>
                   <div>
-                    <label className="text-[10px] font-semibold uppercase text-muted-foreground">
+                    <label htmlFor={`var-name-${index}`} className="text-[10px] font-semibold uppercase text-muted-foreground block mb-1">
                       Variant Name
                     </label>
-                    <Input {...form.register(`variants.${index}.name`)} placeholder="Rose Gold / 42mm" />
+                    <Input id={`var-name-${index}`} {...form.register(`variants.${index}.name`)} placeholder="Rose Gold / 42mm" />
                   </div>
                   <div>
-                    <label className="text-[10px] font-semibold uppercase text-muted-foreground">
+                    <label htmlFor={`var-price-${index}`} className="text-[10px] font-semibold uppercase text-muted-foreground block mb-1">
                       Price (₹)
                     </label>
                     <Input
+                      id={`var-price-${index}`}
                       type="number"
                       step="0.01"
                       {...form.register(`variants.${index}.price`)}
@@ -741,10 +747,11 @@ export default function ProductsPage() {
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-semibold uppercase text-muted-foreground">
+                    <label htmlFor={`var-stock-${index}`} className="text-[10px] font-semibold uppercase text-muted-foreground block mb-1">
                       Stock
                     </label>
                     <Input
+                      id={`var-stock-${index}`}
                       type="number"
                       {...form.register(`variants.${index}.stock`)}
                       placeholder="10"
@@ -844,15 +851,16 @@ export default function ProductsPage() {
                           />
                         </div>
                         <div>
-                          <label className="text-[10px] font-semibold uppercase text-muted-foreground">
+                          <label htmlFor={`media-alt-${index}`} className="text-[10px] font-semibold uppercase text-muted-foreground block mb-1">
                             Alt Text
                           </label>
-                          <Input {...form.register(`media.${index}.alt`)} placeholder="Front angle view" />
+                          <Input id={`media-alt-${index}`} {...form.register(`media.${index}.alt`)} placeholder="Front angle view" />
                         </div>
                       </div>
 
                       <div className="flex items-center space-x-2 pt-0.5">
                         <Switch
+                          id={`media-primary-${index}`}
                           checked={form.watch(`media.${index}.is_primary`)}
                           onCheckedChange={(checked) => {
                             if (checked) {
@@ -864,7 +872,9 @@ export default function ProductsPage() {
                             }
                           }}
                         />
-                        <span className="text-xs text-muted-foreground font-medium">Set as Primary Image</span>
+                        <label htmlFor={`media-primary-${index}`} className="text-xs text-muted-foreground font-medium cursor-pointer">
+                          Set as Primary Image
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -890,24 +900,37 @@ export default function ProductsPage() {
             </div>
 
             {faqsField.fields.map((field, index) => (
-              <div key={field.id} className="p-3 border rounded-lg bg-muted/20 space-y-2 relative">
+              <div key={field.id} className="p-3 border rounded-lg bg-muted/20 space-y-2 relative animate-in fade-in duration-200">
                 <button
                   type="button"
                   onClick={() => faqsField.remove(index)}
                   className="absolute right-2 top-2 text-muted-foreground hover:text-red-500"
+                  aria-label="Remove FAQ"
                 >
                   <X className="w-4 h-4" />
                 </button>
 
-                <div className="pr-6 space-y-2">
-                  <Input
-                    {...form.register(`faqs.${index}.question`)}
-                    placeholder="Question (e.g. Is warranty included?)"
-                  />
-                  <Input
-                    {...form.register(`faqs.${index}.answer`)}
-                    placeholder="Answer (e.g. 2-Year International Warranty)"
-                  />
+                <div className="pr-6 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label htmlFor={`faq-q-${index}`} className="text-[10px] font-semibold uppercase text-muted-foreground block mb-1">
+                      Question *
+                    </label>
+                    <Input
+                      id={`faq-q-${index}`}
+                      {...form.register(`faqs.${index}.question`)}
+                      placeholder="e.g. Is warranty included?"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor={`faq-a-${index}`} className="text-[10px] font-semibold uppercase text-muted-foreground block mb-1">
+                      Answer *
+                    </label>
+                    <Input
+                      id={`faq-a-${index}`}
+                      {...form.register(`faqs.${index}.answer`)}
+                      placeholder="e.g. 2-Year International Warranty"
+                    />
+                  </div>
                 </div>
               </div>
             ))}
@@ -918,18 +941,19 @@ export default function ProductsPage() {
             <h3 className="text-xs font-bold uppercase tracking-wider text-amber-500 border-b pb-1">
               6. SEO Meta Settings
             </h3>
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold uppercase text-muted-foreground">
+                <label htmlFor="seo-title" className="text-xs font-semibold uppercase text-muted-foreground block mb-1">
                   Meta Title
                 </label>
-                <Input {...form.register('meta_title')} placeholder="SEO Meta Title" />
+                <Input id="seo-title" {...form.register('meta_title')} placeholder="SEO Meta Title" />
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase text-muted-foreground">
+                <label htmlFor="seo-desc" className="text-xs font-semibold uppercase text-muted-foreground block mb-1">
                   Meta Description
                 </label>
                 <Textarea
+                  id="seo-desc"
                   {...form.register('meta_description')}
                   placeholder="SEO Meta Description"
                   rows={2}

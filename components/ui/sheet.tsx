@@ -4,15 +4,16 @@ import * as React from "react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-export function Sheet({ open, onOpenChange, children }: { open: boolean, onOpenChange?: (open: boolean) => void, children: React.ReactNode }) {
+export function Sheet({ open, onOpenChange, children, className }: { open: boolean, onOpenChange?: (open: boolean) => void, children: React.ReactNode, className?: string }) {
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/80 animate-in fade-in duration-200">
-      <div className="relative h-full max-w-md w-full bg-[#0a0a0c] border-l border-border p-6 shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-300">
+      <div className={cn("relative h-full max-w-md w-full bg-[#0a0a0c] border-l border-border p-6 shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-300 focus-visible:outline-none", className)}>
         {children}
         <button
           onClick={() => onOpenChange?.(false)}
           className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 transition-opacity cursor-pointer text-muted-foreground hover:text-foreground"
+          aria-label="Close panel"
         >
           <X className="h-4 w-4" />
         </button>
