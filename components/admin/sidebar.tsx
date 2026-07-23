@@ -74,7 +74,7 @@ export function Sidebar() {
               className={cn(
                 'flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group',
                 isActive
-                  ? 'bg-amber-500/10 text-amber-500 font-semibold border border-amber-500/20 shadow-sm'
+                  ? 'bg-champagne-gold/10 text-champagne-gold font-semibold border border-champagne-gold/20 shadow-sm'
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
               )}
             >
@@ -82,12 +82,12 @@ export function Sidebar() {
                 <Icon
                   className={cn(
                     'w-4 h-4 transition-transform duration-200 group-hover:scale-110',
-                    isActive ? 'text-amber-500' : 'text-muted-foreground group-hover:text-foreground'
+                    isActive ? 'text-champagne-gold' : 'text-muted-foreground group-hover:text-foreground'
                   )}
                 />
                 <span>{item.name}</span>
               </div>
-              {isActive && <ChevronRight className="w-3.5 h-3.5 text-amber-500" />}
+              {isActive && <ChevronRight className="w-3.5 h-3.5 text-champagne-gold" />}
             </Link>
           );
         })}
@@ -96,7 +96,7 @@ export function Sidebar() {
       {/* User Footer */}
       <div className="p-4 border-t bg-muted/20 space-y-3">
         <div className="flex items-center space-x-3 px-2">
-          <div className="w-9 h-9 rounded-full bg-amber-500/20 text-amber-500 flex items-center justify-center font-bold text-sm border border-amber-500/30 shrink-0">
+          <div className="w-9 h-9 rounded-full bg-champagne-gold/20 text-champagne-gold flex items-center justify-center font-bold text-sm border border-champagne-gold/30 shrink-0">
             {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
           </div>
           <div className="flex-1 min-w-0">

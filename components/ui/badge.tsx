@@ -15,10 +15,10 @@ const badgeVariants = cva(
           "border-transparent bg-destructive text-[#fafafa] hover:bg-destructive/80",
         outline: "text-foreground",
         success: "border-transparent bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20",
-        warning: "border-transparent bg-amber-500/10 text-amber-500 hover:bg-amber-500/20",
+        warning: "border-transparent bg-champagne-gold/10 text-champagne-gold hover:bg-champagne-gold/20",
         info: "border-transparent bg-blue-500/10 text-blue-500 hover:bg-blue-500/20",
-        gold: "border-[#c4a484]/30 bg-[#c4a484]/10 text-[#c4a484] hover:bg-[#c4a484]/20",
-        luxury: "border-[#c4a484]/30 bg-[#c4a484]/10 text-[#c4a484] hover:bg-[#c4a484]/20",
+        gold: "border-champagne-gold/30 bg-champagne-gold/10 text-champagne-gold hover:bg-champagne-gold/20",
+        luxury: "border-champagne-gold/30 bg-champagne-gold/10 text-champagne-gold hover:bg-champagne-gold/20",
       },
     },
     defaultVariants: {

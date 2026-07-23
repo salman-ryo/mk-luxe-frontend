@@ -120,7 +120,7 @@ export default function DashboardPage() {
       <div className="relative rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950/40 p-6 md:p-8 border border-blue-500/20 shadow-xl overflow-hidden">
         <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
         <div className="relative z-10 space-y-2 max-w-2xl">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-950 border border-amber-500/20 text-amber-400 text-xs font-semibold">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-950 border border-champagne-gold/20 text-champagne-gold text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
             <span>MK LUXE Executive Dashboard</span>
           </div>
@@ -136,12 +136,12 @@ export default function DashboardPage() {
       {/* Metric Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Products Metric */}
-        <Card className="relative overflow-hidden border-border/80 hover:border-amber-500/40 transition-all bg-card/30 backdrop-blur-sm">
+        <Card className="relative overflow-hidden border-border/80 hover:border-champagne-gold/40 transition-all bg-card/30 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Total Products
             </CardTitle>
-            <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center border border-amber-500/20">
+            <div className="w-9 h-9 rounded-xl bg-champagne-gold/10 text-champagne-gold flex items-center justify-center border border-champagne-gold/20">
               <Package className="w-4 h-4" />
             </div>
           </CardHeader>
@@ -157,7 +157,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Categories Metric */}
-        <Card className="relative overflow-hidden border-border/80 hover:border-amber-500/40 transition-all bg-card/30 backdrop-blur-sm">
+        <Card className="relative overflow-hidden border-border/80 hover:border-champagne-gold/40 transition-all bg-card/30 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Product Categories
@@ -178,7 +178,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Total Stock Metric */}
-        <Card className="relative overflow-hidden border-border/80 hover:border-amber-500/40 transition-all bg-card/30 backdrop-blur-sm">
+        <Card className="relative overflow-hidden border-border/80 hover:border-champagne-gold/40 transition-all bg-card/30 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Total Stock
@@ -194,8 +194,8 @@ export default function DashboardPage() {
             <div className="text-xs text-muted-foreground mt-2 flex items-center">
               {stats.out_of_stock_count > 0 ? (
                 <>
-                  <AlertCircle className="w-3.5 h-3.5 text-amber-500 mr-1" />
-                  <span className="text-amber-500 font-medium">{stats.out_of_stock_count} items out of stock</span>
+                  <AlertCircle className="w-3.5 h-3.5 text-champagne-gold mr-1" />
+                  <span className="text-champagne-gold font-medium">{stats.out_of_stock_count} items out of stock</span>
                 </>
               ) : (
                 <>
@@ -208,7 +208,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Featured Showcase Metric */}
-        <Card className="relative overflow-hidden border-border/80 hover:border-amber-500/40 transition-all bg-card/30 backdrop-blur-sm">
+        <Card className="relative overflow-hidden border-border/80 hover:border-champagne-gold/40 transition-all bg-card/30 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Storefront Badges
@@ -235,7 +235,7 @@ export default function DashboardPage() {
         <Card className="lg:col-span-2 border-border/80 bg-card/20 backdrop-blur-sm">
           <CardHeader className="border-b border-border/50 pb-4">
             <div className="flex items-center space-x-2">
-              <BarChart3 className="w-5 h-5 text-amber-500" />
+              <BarChart3 className="w-5 h-5 text-champagne-gold" />
               <div>
                 <CardTitle className="text-base font-bold">Category Catalog Distribution</CardTitle>
                 <CardDescription className="text-xs mt-0.5">
@@ -259,7 +259,7 @@ export default function DashboardPage() {
                       </div>
                       <div className="w-full bg-[#1b1b1f] border border-border/50 h-2 rounded-full overflow-hidden shadow-inner">
                         <div
-                          className="bg-gradient-to-r from-amber-500 to-amber-300 h-full rounded-full transition-all duration-500"
+                          className="bg-gradient-to-r from-champagne-gold to-muted-bronze h-full rounded-full transition-all duration-500"
                           style={{ width: `${percentage}%` }}
                         />
                       </div>
@@ -279,7 +279,7 @@ export default function DashboardPage() {
         <Card className="border-border/80 bg-card/20 backdrop-blur-sm flex flex-col">
           <CardHeader className="border-b border-border/50 pb-4">
             <div className="flex items-center space-x-2">
-              <MessageSquare className="w-5 h-5 text-amber-500" />
+              <MessageSquare className="w-5 h-5 text-champagne-gold" />
               <div>
                 <CardTitle className="text-base font-bold">Recent Inquiries</CardTitle>
                 <CardDescription className="text-xs mt-0.5">
@@ -324,26 +324,26 @@ export default function DashboardPage() {
         <h2 className="text-lg font-bold tracking-tight text-foreground">Quick Management Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link href="/admin/products" className="group">
-            <Card className="p-5 border border-border/80 hover:border-amber-500/40 hover:bg-muted/30 transition-all cursor-pointer bg-card/30 backdrop-blur-sm">
+            <Card className="p-5 border border-border/80 hover:border-champagne-gold/40 hover:bg-muted/30 transition-all cursor-pointer bg-card/30 backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center group-hover:scale-110 transition-transform border border-amber-500/20">
+                  <div className="w-10 h-10 rounded-lg bg-champagne-gold/10 text-champagne-gold flex items-center justify-center group-hover:scale-110 transition-transform border border-champagne-gold/20">
                     <Package className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-sm group-hover:text-amber-500 transition-colors">
+                    <h3 className="font-semibold text-sm group-hover:text-champagne-gold transition-colors">
                       Manage Products
                     </h3>
                     <p className="text-xs text-muted-foreground">Add or update catalog items</p>
                   </div>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-amber-500 transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-champagne-gold transition-colors" />
               </div>
             </Card>
           </Link>
 
           <Link href="/admin/categories" className="group">
-            <Card className="p-5 border border-border/80 hover:border-amber-500/40 hover:bg-muted/30 transition-all cursor-pointer bg-card/30 backdrop-blur-sm">
+            <Card className="p-5 border border-border/80 hover:border-champagne-gold/40 hover:bg-muted/30 transition-all cursor-pointer bg-card/30 backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-lg bg-sky-500/10 text-sky-500 flex items-center justify-center group-hover:scale-110 transition-transform border border-sky-500/20">
@@ -362,7 +362,7 @@ export default function DashboardPage() {
           </Link>
 
           <Link href="/admin/inquiries" className="group">
-            <Card className="p-5 border border-border/80 hover:border-amber-500/40 hover:bg-muted/30 transition-all cursor-pointer bg-card/30 backdrop-blur-sm">
+            <Card className="p-5 border border-border/80 hover:border-champagne-gold/40 hover:bg-muted/30 transition-all cursor-pointer bg-card/30 backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center group-hover:scale-110 transition-transform border border-emerald-500/20">

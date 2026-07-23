@@ -77,7 +77,7 @@ export default function InquiriesPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center space-x-2">
-            <MessageSquare className="w-6 h-6 text-amber-500" />
+            <MessageSquare className="w-6 h-6 text-champagne-gold" />
             <span>Customer Inquiries</span>
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -151,7 +151,7 @@ export default function InquiriesPage() {
                   <TableCell>
                     <div className="space-y-1">
                       <div className="flex items-center space-x-1.5 font-semibold text-foreground text-sm">
-                        <User className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                        <User className="w-3.5 h-3.5 text-champagne-gold shrink-0" />
                         <span>{inquiry.name}</span>
                       </div>
                       <div className="flex items-center space-x-1.5 text-xs text-muted-foreground">

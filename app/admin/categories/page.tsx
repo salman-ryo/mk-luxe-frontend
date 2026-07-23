@@ -211,7 +211,7 @@ export default function CategoriesPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center space-x-2">
-            <FolderTree className="w-6 h-6 text-amber-500" />
+            <FolderTree className="w-6 h-6 text-champagne-gold" />
             <span>Category Management</span>
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -308,7 +308,7 @@ export default function CategoriesPage() {
                 <TableCell>
                   {category.is_featured && (
                     <Badge variant="gold" className="flex items-center w-fit space-x-1">
-                      <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                      <Star className="w-3 h-3 fill-champagne-gold text-champagne-gold" />
                       <span>Featured</span>
                     </Badge>
                   )}
@@ -332,7 +332,7 @@ export default function CategoriesPage() {
                       variant="ghost"
                       size="icon"
                       onClick={() => handleOpenEdit(category)}
-                      className="h-8 w-8 hover:text-amber-500"
+                      className="h-8 w-8 hover:text-champagne-gold"
                       title="Edit Category"
                     >
                       <Pencil className="w-4 h-4" />

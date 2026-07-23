@@ -133,7 +133,7 @@ export function ImageUploader({
               variant="ghost"
               size="sm"
               onClick={() => setShowUrlInput(!showUrlInput)}
-              className="h-6 text-amber-500 hover:text-amber-400 p-1"
+              className="h-6 text-champagne-gold hover:text-champagne-gold/80 p-1"
               aria-label={showUrlInput ? 'Hide URL input' : 'Edit URL text'}
             >
               {showUrlInput ? 'Hide URL' : 'Edit URL'}
@@ -170,10 +170,10 @@ export function ImageUploader({
           tabIndex={0}
           role="button"
           aria-label={label ? `Upload image for ${label}` : "Upload image drag and drop area"}
-          className={`h-40 rounded-xl border-2 border-dashed flex flex-col items-center justify-center p-4 text-center cursor-pointer transition-all duration-300 focus-visible:outline-none focus-visible:border-amber-500 focus-visible:ring-1 focus-visible:ring-amber-500/20 ${
+          className={`h-40 rounded-xl border-2 border-dashed flex flex-col items-center justify-center p-4 text-center cursor-pointer transition-all duration-300 focus-visible:outline-none focus-visible:border-champagne-gold focus-visible:ring-1 focus-visible:ring-champagne-gold/20 ${
             dragActive
-              ? 'border-amber-500 bg-amber-500/5'
-              : 'border-[#c4a484]/30 hover:border-amber-500/40 bg-card/20'
+              ? 'border-champagne-gold bg-champagne-gold/5'
+              : 'border-champagne-gold/30 hover:border-champagne-gold/40 bg-card/20'
           }`}
         >
           <input
@@ -186,12 +186,12 @@ export function ImageUploader({
           />
 
           <div className="flex flex-col items-center space-y-2">
-            <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
+            <div className="w-12 h-12 rounded-full bg-champagne-gold/10 border border-champagne-gold/20 flex items-center justify-center text-champagne-gold">
               <UploadCloud className="w-6 h-6" />
             </div>
             <div>
               <p className="text-sm font-semibold text-foreground">
-                Drag & drop image, or <span className="text-amber-500">browse</span>
+                Drag & drop image, or <span className="text-champagne-gold">browse</span>
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 Supports JPEG, PNG, WEBP, GIF (Max 10MB)
@@ -203,7 +203,7 @@ export function ImageUploader({
                 e.stopPropagation();
                 setShowUrlInput(!showUrlInput);
               }}
-              className="text-xs text-amber-500/80 hover:text-amber-500 mt-2 underline flex items-center cursor-pointer"
+              className="text-xs text-champagne-gold/80 hover:text-champagne-gold mt-2 underline flex items-center cursor-pointer"
               aria-label="Toggle direct URL address input field"
             >
               <LinkIcon className="w-3 h-3 mr-1" />

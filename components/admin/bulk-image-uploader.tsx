@@ -70,8 +70,8 @@ export function BulkImageUploader({ onFilesSelected }: BulkImageUploaderProps) {
       onClick={triggerFileBrowser}
       className={`h-28 rounded-xl border-2 border-dashed flex flex-col items-center justify-center p-4 text-center cursor-pointer transition-all duration-300 ${
         dragActive
-          ? 'border-amber-500 bg-amber-500/5'
-          : 'border-[#c4a484]/30 hover:border-amber-500/40 bg-card/20'
+          ? 'border-champagne-gold bg-champagne-gold/5'
+          : 'border-champagne-gold/30 hover:border-champagne-gold/40 bg-card/20'
       }`}
     >
       <input
@@ -84,12 +84,12 @@ export function BulkImageUploader({ onFilesSelected }: BulkImageUploaderProps) {
       />
 
       <div className="flex flex-col items-center space-y-1.5">
-        <div className="w-9 h-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
+        <div className="w-9 h-9 rounded-full bg-champagne-gold/10 border border-champagne-gold/20 flex items-center justify-center text-champagne-gold">
           <UploadCloud className="w-4 h-4" />
         </div>
         <div>
           <p className="text-xs font-semibold text-foreground">
-            Drag & drop multiple images here, or <span className="text-amber-500">browse</span>
+            Drag & drop multiple images here, or <span className="text-champagne-gold">browse</span>
           </p>
           <p className="text-[10px] text-muted-foreground mt-0.5">
             Select or drop multiple product photos at once (Max 10MB per file)

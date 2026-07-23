@@ -331,7 +331,7 @@ export default function ProductsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center space-x-2">
-            <Package className="w-6 h-6 text-amber-500" />
+            <Package className="w-6 h-6 text-champagne-gold" />
             <span>Product Management</span>
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -342,9 +342,9 @@ export default function ProductsPage() {
           <Button
             onClick={() => setIsJsonModalOpen(true)}
             variant="outline"
-            className="border-amber-500/30 hover:bg-amber-500/10 hover:border-amber-500/50"
+            className="border-champagne-gold/30 hover:bg-champagne-gold/10 hover:border-champagne-gold/50"
           >
-            <FileJson className="w-4 h-4 mr-2 text-amber-500" /> Import via JSON
+            <FileJson className="w-4 h-4 mr-2 text-champagne-gold" /> Import via JSON
           </Button>
           <Button onClick={handleOpenCreate} variant="champagneGold">
             <Plus className="w-4 h-4 mr-2" /> Add Product
@@ -484,7 +484,7 @@ export default function ProductsPage() {
 
                     <TableCell>
                       <div>
-                        <p className="font-semibold text-sm text-amber-500 font-mono">
+                        <p className="font-semibold text-sm text-champagne-gold font-mono">
                           ₹{minPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </p>
                         <p className="text-xs text-muted-foreground">
@@ -497,7 +497,7 @@ export default function ProductsPage() {
                       <div className="flex flex-wrap gap-1">
                         {product.is_featured && (
                           <Badge variant="gold" className="text-[10px]">
-                            <Star className="w-3 h-3 mr-1 fill-amber-400" /> Featured
+                            <Star className="w-3 h-3 mr-1 fill-champagne-gold" /> Featured
                           </Badge>
                         )}
                         {product.is_most_sold && (
@@ -514,7 +514,7 @@ export default function ProductsPage() {
                           variant="ghost"
                           size="icon"
                           onClick={() => handleOpenEdit(product)}
-                          className="h-8 w-8 hover:text-amber-500"
+                          className="h-8 w-8 hover:text-champagne-gold"
                           title="Edit Product"
                         >
                           <Pencil className="w-4 h-4" />

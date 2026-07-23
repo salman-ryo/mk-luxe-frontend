@@ -65,11 +65,11 @@ export default function LoginPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4 relative overflow-hidden">
         <div className="flex flex-col items-center space-y-4 text-center z-10 animate-in fade-in duration-300">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-slate-950 shadow-lg shadow-amber-500/25 animate-pulse">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-champagne-gold to-muted-bronze flex items-center justify-center text-slate-950 shadow-lg shadow-champagne-gold/25 animate-pulse">
             <Gem className="w-6 h-6" />
           </div>
-          <p className="text-sm font-medium text-amber-200/80 flex items-center space-x-2">
-            <Loader2 className="w-4 h-4 animate-spin text-amber-500" />
+          <p className="text-sm font-medium text-champagne-gold/80 flex items-center space-x-2">
+            <Loader2 className="w-4 h-4 animate-spin text-champagne-gold" />
             <span>Verifying session...</span>
           </p>
         </div>
@@ -80,15 +80,15 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4 relative overflow-hidden animate-in fade-in duration-300">
       {/* Background Decorative Gradients */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl" />
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-champagne-gold/10 rounded-full blur-3xl" />
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-champagne-gold/10 rounded-full blur-3xl" />
 
-      <Card className="w-full max-w-md border-amber-500/20 bg-slate-900/80 backdrop-blur-2xl shadow-2xl shadow-amber-500/5 relative z-10">
+      <Card className="w-full max-w-md border-champagne-gold/20 bg-slate-900/80 backdrop-blur-2xl shadow-2xl shadow-champagne-gold/5 relative z-10">
         <CardHeader className="space-y-3 text-center pb-6 border-b border-slate-800">
-          <div className="mx-auto w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-slate-950 shadow-lg shadow-amber-500/25 mb-2">
+          <div className="mx-auto w-12 h-12 rounded-2xl bg-gradient-to-tr from-champagne-gold to-muted-bronze flex items-center justify-center text-slate-950 shadow-lg shadow-champagne-gold/25 mb-2">
             <Gem className="w-6 h-6" />
           </div>
-          <CardTitle className="text-2xl font-bold tracking-tight bg-gradient-to-r from-amber-400 via-amber-200 to-amber-500 bg-clip-text text-transparent">
+          <CardTitle className="text-2xl font-bold tracking-tight bg-gradient-to-r from-champagne-gold via-muted-bronze to-champagne-gold bg-clip-text text-transparent">
             MK LUXE ADMIN
           </CardTitle>
           <CardDescription className="text-slate-400 text-sm">
@@ -116,7 +116,7 @@ export default function LoginPage() {
                   type="email"
                   disabled={isLoadingState}
                   placeholder="admin@example.com"
-                  className="pl-9 bg-slate-950/60 border-slate-800 text-slate-100 placeholder:text-slate-500 focus-visible:ring-amber-500/50 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="pl-9 bg-slate-950/60 border-slate-800 text-slate-100 placeholder:text-slate-500 focus-visible:ring-champagne-gold/50 disabled:opacity-60 disabled:cursor-not-allowed"
                 />
               </div>
               {errors.email && (
@@ -135,7 +135,7 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   disabled={isLoadingState}
                   placeholder="••••••••"
-                  className="pl-9 pr-10 bg-slate-950/60 border-slate-800 text-slate-100 placeholder:text-slate-500 focus-visible:ring-amber-500/50 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="pl-9 pr-10 bg-slate-950/60 border-slate-800 text-slate-100 placeholder:text-slate-500 focus-visible:ring-champagne-gold/50 disabled:opacity-60 disabled:cursor-not-allowed"
                 />
                 <button
                   type="button"

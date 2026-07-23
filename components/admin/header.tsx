@@ -19,8 +19,8 @@ export function Header() {
       {/* Dynamic Breadcrumbs */}
       <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-sm text-muted-foreground">
         <Link
-          href="/admin/dashboard"
-          className="hover:text-amber-500 transition-colors flex items-center"
+          href="/"
+          className="hover:text-champagne-gold transition-colors flex items-center"
         >
           <Home className="w-4 h-4" />
         </Link>
@@ -52,7 +52,7 @@ export function Header() {
           <Badge variant="gold" className="capitalize">
             {user?.role || 'Admin'}
           </Badge>
-          <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-500 flex items-center justify-center font-semibold text-xs border border-amber-500/30">
+          <div className="w-8 h-8 rounded-full bg-champagne-gold/20 text-champagne-gold flex items-center justify-center font-semibold text-xs border border-champagne-gold/30">
             {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
           </div>
         </div>

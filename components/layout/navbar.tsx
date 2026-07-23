@@ -16,6 +16,8 @@ const navItems = [
 
 export function Navbar() {
   const pathname = usePathname()
+  if (pathname?.startsWith('/admin')) return null;
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
 

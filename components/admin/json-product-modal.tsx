@@ -151,7 +151,7 @@ export function JsonProductModal({ isOpen, onClose }: JsonProductModalProps) {
       <DialogHeader className="border-b pb-4">
         <div className="flex items-center justify-between">
           <DialogTitle className="text-xl font-bold flex items-center space-x-2 text-foreground">
-            <FileJson className="w-5 h-5 text-amber-500" />
+            <FileJson className="w-5 h-5 text-champagne-gold" />
             <span>Direct JSON Product Input</span>
           </DialogTitle>
           <div className="flex items-center space-x-2">
@@ -185,7 +185,7 @@ export function JsonProductModal({ isOpen, onClose }: JsonProductModalProps) {
               className="h-8 text-xs"
               title="Pretty Print JSON"
             >
-              <Wand2 className="w-3.5 h-3.5 mr-1.5 text-amber-500" /> Format JSON
+              <Wand2 className="w-3.5 h-3.5 mr-1.5 text-champagne-gold" /> Format JSON
             </Button>
             <Button
               type="button"
@@ -217,7 +217,7 @@ export function JsonProductModal({ isOpen, onClose }: JsonProductModalProps) {
             value={jsonInput}
             onChange={(e) => handleInputChange(e.target.value)}
             placeholder="Paste your JSON product body here..."
-            className="w-full h-80 p-4 font-mono text-xs bg-slate-950 text-emerald-400 border border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 leading-relaxed overflow-y-auto selection:bg-amber-500/30 selection:text-white"
+            className="w-full h-80 p-4 font-mono text-xs bg-slate-950 text-emerald-400 border border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-champagne-gold/50 leading-relaxed overflow-y-auto selection:bg-champagne-gold/30 selection:text-white"
             spellCheck={false}
           />
         </div>

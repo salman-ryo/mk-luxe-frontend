@@ -102,12 +102,12 @@ export default function FeaturedCategoriesCarousel({ categories }: Props) {
             // On lg+: fixed width so items don't collapse in flex
             className="group aspect-square flex flex-col items-center justify-center gap-3 bg-deep-slate rounded-lg lg:shrink-0 lg:w-60"
           >
-            <div className="relative w-40 h-40 rounded-full border-2 border-champagne-gold p-4 group-hover:border-primary transition-colors duration-700">
+            <div className="relative size-40 rounded-full border-2 border-champagne-gold p-4 group-hover:border-primary transition-colors duration-700">
               <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">
                 <img
                   src={cat.image_url || '/placeholder.svg'}
                   alt={cat.name}
-                  className="w-2/3 h-2/3 object-contain"
+                  className="size-full object-cover"
                 />
               </div>
             </div>
