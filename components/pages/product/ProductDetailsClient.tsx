@@ -217,10 +217,10 @@ const pageUrl =
   }
 
   return (
-    <div className="container mx-auto py-24 px-16 md:py-16">
-      <div className="mb-10">
-        <h1 className="text-3xl font-semibold tracking-tight md:text-5xl">{product.name}</h1>
-        <div className="mt-4 flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">
+    <div className="container mx-auto py-12 px-8 lg:py-10 lg:px-16 bg-midnight-charcoal">
+      <div className="mb-6">
+        <h1 className="text-3xl font-semibold tracking-tight lg:text-4xl">{product.name}</h1>
+        <div className="mt-3 flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">
           <Link href="/">Home</Link>
           <span>/</span>
           <Link href="/shop">Shop</Link>
@@ -233,13 +233,13 @@ const pageUrl =
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
-        <div className="space-y-4">
-          <div className="relative aspect-square overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 items-start">
+        <div className="space-y-4 lg:sticky lg:top-24">
+          <div className="relative h-[300px] sm:h-[400px] lg:h-[400px] w-full overflow-hidden rounded-2xl border border-border bg-card/40 flex items-center justify-center p-6 shadow-sm">
             <img
               src={images[selectedImage]?.image_url || getPrimaryImage(product)}
               alt={images[selectedImage]?.alt_text || product.name}
-              className="h-full w-full object-cover"
+              className="max-h-full max-w-full object-contain"
             />
 
             <button
@@ -285,7 +285,7 @@ const pageUrl =
           </div>
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col lg:max-h-[500px] lg:overflow-y-auto pr-3 scrollbar-thin">
           <div className="mb-4 flex flex-wrap gap-2">
             {badges.map((badge) => (
               <span

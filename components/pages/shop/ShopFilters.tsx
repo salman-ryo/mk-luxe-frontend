@@ -93,7 +93,7 @@ export default function ShopFilters({ initialFilters }: { initialFilters: Filter
   }
 
   return (
-    <form key={key} onSubmit={handleSubmit} className="space-y-8 sticky top-6">
+    <form key={key} onSubmit={handleSubmit} className="space-y-8 sticky top-6 max-h-[calc(100vh-8rem)] overflow-y-auto pr-3 scrollbar-thin">
       <div>
         <div className="flex justify-between items-center mb-6 border-b border-border pb-2">
           <h2 className="uppercase text-xs tracking-widest font-bold">Search</h2>
@@ -140,6 +140,7 @@ export default function ShopFilters({ initialFilters }: { initialFilters: Filter
         <select
           name="category"
           defaultValue={initialFilters.category}
+          onChange={(e) => e.target.form?.requestSubmit()}
           className="w-full bg-transparent border border-border px-3 py-2 text-xs uppercase tracking-widest focus:outline-none focus:border-primary text-foreground cursor-pointer"
         >
           <option value="" className="bg-[#0a0a0c]">All Categories</option>
@@ -210,7 +211,8 @@ export default function ShopFilters({ initialFilters }: { initialFilters: Filter
         <select
           name="sort"
           defaultValue={initialFilters.sort}
-          className="w-full bg-transparent border border-border px-3 py-2 text-xs uppercase tracking-widest focus:outline-none focus:border-primary"
+          onChange={(e) => e.target.form?.requestSubmit()}
+          className="w-full bg-transparent border border-border px-3 py-2 text-xs uppercase tracking-widest focus:outline-none focus:border-primary cursor-pointer"
         >
           <option value="newest">Sort by: Newest</option>
           <option value="oldest">Sort by: Oldest</option>
