@@ -7,8 +7,8 @@ const requireEnv = (value: string | undefined, key: string): string => {
 
 export const clientEnv = {
   BACKEND_URI: requireEnv(
-    process.env.NEXT_PUBLIC_BACKEND_URI,
-    "NEXT_PUBLIC_BACKEND_URI"
+    process.env.NEXT_PUBLIC_API_URL,
+    "NEXT_PUBLIC_API_URL"
   ),
   FRONTEND_URI: requireEnv(
     process.env.NEXT_PUBLIC_FRONTEND_URI,

@@ -8,5 +8,5 @@ const requireEnv = (key: string): string => {
 }
 
 export const serverEnv = {
-  BACKEND_URI: requireEnv("BACKEND_URI"),
+  BACKEND_URI: requireEnv("NEXT_PUBLIC_API_URL"),
 } as const
