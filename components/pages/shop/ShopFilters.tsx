@@ -1,6 +1,7 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
+import { Filter } from "lucide-react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
@@ -92,8 +93,33 @@ export default function ShopFilters({ initialFilters }: { initialFilters: Filter
     router.push(pathname, { scroll: false })
   }
 
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
+
   return (
-    <form key={key} onSubmit={handleSubmit} className="space-y-8 sticky top-6 max-h-[calc(100vh-8rem)] overflow-y-auto pr-3 scrollbar-thin">
+    <div className="lg:block">
+      {/* Mobile Toggle Button */}
+      <button
+        type="button"
+        onClick={() => setIsMobileOpen(!isMobileOpen)}
+        className="w-full lg:hidden flex items-center justify-between bg-deep-slate border border-border px-4 py-3 text-xs uppercase tracking-widest font-bold text-champagne-gold mb-6"
+      >
+        <span className="flex items-center gap-2">
+          <Filter className="w-4 h-4 text-primary" />
+          {isMobileOpen ? "Hide Filters" : "Show Filters"}
+        </span>
+        <span className="text-primary font-bold">{isMobileOpen ? "−" : "+"}</span>
+      </button>
+
+      <form
+        key={key}
+        onSubmit={(e) => {
+          handleSubmit(e)
+          setIsMobileOpen(false)
+        }}
+        className={`space-y-8 lg:sticky lg:top-6 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:pr-3 lg:scrollbar-thin ${
+          isMobileOpen ? "block" : "hidden lg:block"
+        }`}
+      >
       <div>
         <div className="flex justify-between items-center mb-6 border-b border-border pb-2">
           <h2 className="uppercase text-xs tracking-widest font-bold">Search</h2>
@@ -233,5 +259,6 @@ export default function ShopFilters({ initialFilters }: { initialFilters: Filter
         </Button>
       </div>
     </form>
+    </div>
   )
 }

@@ -188,7 +188,7 @@ export default async function ShopScreen({ searchParams }: { searchParams?: Sear
   const end = count > 0 ? Math.min(currentPage * PAGE_SIZE, count) : 0
 
   return (
-    <div className="container mx-auto py-24 px-16 bg-midnight-charcoal">
+    <div className="container mx-auto py-24 px-4 sm:px-8 md:px-16 bg-midnight-charcoal max-md:px-8">
       <div className="mb-12">
         <h1 className="text-4xl font-serif uppercase tracking-widest mb-4">Products</h1>
         <div className="flex items-center gap-2 text-xs text-muted-foreground uppercase tracking-widest">

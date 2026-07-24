@@ -47,7 +47,7 @@ export default function TermsAndConditionsPage() {
     <main className="min-h-screen bg-background text-foreground py-20 md:py-24 px-4">
       <div className="container mx-auto max-w-5xl">
         <div className="text-center mb-14 md:mb-16">
-          <div className="fixed bottom-4 left-4 border border-primary/25 bg-primary/5 px-4 py-2 uppercase tracking-[0.3em] text-xs text-primary">
+          <div className="hidden md:fixed bottom-4 left-4 border border-primary/25 bg-primary/5 px-4 py-2 uppercase tracking-[0.3em] text-xs text-primary">
           <div className="flex justify-center items-center gap-x-2">
 
             <Scale className="w-4 h-4" />

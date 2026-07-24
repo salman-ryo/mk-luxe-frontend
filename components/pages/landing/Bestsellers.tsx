@@ -7,8 +7,8 @@ export default async function Bestsellers() {
   if (products.length === 0) return null;
 
   return (
-    <section className="pb-24 px-16 bg-card/30">
-      <div className="container mx-auto px-4">
+    <section className="pb-12 lg:pb-24 px-4 md:px-16 bg-card/30 max-md:px-8">
+      <div className="container mx-auto">
         <BestsellersCarousel products={products} />
       </div>
     </section>

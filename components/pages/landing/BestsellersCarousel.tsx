@@ -12,12 +12,12 @@ interface Props {
 }
 
 // ─── Auto-scroll tuning ────────────────────────────────────────────────────
-const PX_PER_SECOND      = 50;   // Base drift speed (lower = slower)
-const SEGMENT_MIN_PX     = 280;  // Shortest single scroll burst
-const SEGMENT_MAX_PX     = 560;  // Longest single scroll burst
-const DIR_FLIP_CHANCE    = 0.35; // Probability to reverse direction after a segment
-const RESUME_DELAY_MS    = 1800; // Grace period before resuming after user interaction
-const MOUNT_DELAY_MS     = 900;  // Wait for layout to settle before starting
+const PX_PER_SECOND = 50;   // Base drift speed (lower = slower)
+const SEGMENT_MIN_PX = 280;  // Shortest single scroll burst
+const SEGMENT_MAX_PX = 560;  // Longest single scroll burst
+const DIR_FLIP_CHANCE = 0.35; // Probability to reverse direction after a segment
+const RESUME_DELAY_MS = 1800; // Grace period before resuming after user interaction
+const MOUNT_DELAY_MS = 900;  // Wait for layout to settle before starting
 // ───────────────────────────────────────────────────────────────────────────
 
 const SCROLL_BTN_CLASS =
@@ -27,18 +27,18 @@ const SCROLL_BTN_CLASS =
   'disabled:opacity-25 disabled:pointer-events-none';
 
 export default function BestsellersCarousel({ products }: Props) {
-  const scrollRef   = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Framer Motion animation controls — kept in a ref so stop/start never
   // trigger re-renders.
-  const animRef     = useRef<AnimationPlaybackControls | null>(null);
-  const dirRef      = useRef<1 | -1>(1);  // 1 = right, -1 = left
-  const isHovered   = useRef(false);
+  const animRef = useRef<AnimationPlaybackControls | null>(null);
+  const dirRef = useRef<1 | -1>(1);  // 1 = right, -1 = left
+  const isHovered = useRef(false);
   const isUserInput = useRef(false);
   const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const mountTimer  = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mountTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const [canScrollLeft,  setCanScrollLeft]  = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
   // ── Scroll state (button enable/disable) ─────────────────────────────────
@@ -69,13 +69,13 @@ export default function BestsellersCarousel({ products }: Props) {
 
     // Flip direction at the edges before choosing a target
     if (el.scrollLeft >= maxScroll - 4) dirRef.current = -1;
-    if (el.scrollLeft <= 4)             dirRef.current =  1;
+    if (el.scrollLeft <= 4) dirRef.current = 1;
 
     // Random segment length → variable drift feel
-    const segPx   = SEGMENT_MIN_PX + Math.random() * (SEGMENT_MAX_PX - SEGMENT_MIN_PX);
+    const segPx = SEGMENT_MIN_PX + Math.random() * (SEGMENT_MAX_PX - SEGMENT_MIN_PX);
     const rawTarget = el.scrollLeft + dirRef.current * segPx;
-    const target    = Math.max(0, Math.min(maxScroll, rawTarget));
-    const distance  = Math.abs(target - el.scrollLeft);
+    const target = Math.max(0, Math.min(maxScroll, rawTarget));
+    const distance = Math.abs(target - el.scrollLeft);
 
     if (distance < 4) return; // Nothing to animate (already at edge)
 
@@ -138,19 +138,19 @@ export default function BestsellersCarousel({ products }: Props) {
       // Clear the flag after the grace period
       setTimeout(() => { isUserInput.current = false; }, RESUME_DELAY_MS);
     };
-    el.addEventListener('wheel',      onUserInput, { passive: true });
+    el.addEventListener('wheel', onUserInput, { passive: true });
     el.addEventListener('touchstart', onUserInput, { passive: true });
 
     // Slight delay so layout/images have settled before we read scrollWidth
     mountTimer.current = setTimeout(startAutoScroll, MOUNT_DELAY_MS);
 
     return () => {
-      el.removeEventListener('scroll',     updateScrollState);
-      el.removeEventListener('wheel',      onUserInput);
+      el.removeEventListener('scroll', updateScrollState);
+      el.removeEventListener('wheel', onUserInput);
       el.removeEventListener('touchstart', onUserInput);
       ro.disconnect();
       animRef.current?.stop();
-      if (mountTimer.current)  clearTimeout(mountTimer.current);
+      if (mountTimer.current) clearTimeout(mountTimer.current);
       if (resumeTimer.current) clearTimeout(resumeTimer.current);
     };
   }, [updateScrollState, startAutoScroll, pauseAutoScroll, scheduleResume]);
@@ -163,7 +163,7 @@ export default function BestsellersCarousel({ products }: Props) {
     pauseAutoScroll();
 
     const firstChild = el.firstElementChild as HTMLElement | null;
-    const itemWidth  = firstChild ? firstChild.offsetWidth + 32 : 420;
+    const itemWidth = firstChild ? firstChild.offsetWidth + 32 : 420;
 
     el.scrollBy({
       left: direction === 'left' ? -(itemWidth * 2) : itemWidth * 2,
@@ -191,8 +191,8 @@ export default function BestsellersCarousel({ products }: Props) {
   return (
     <>
       {/* Header row: title left, scroll arrows right (lg+ only) */}
-      <div className="flex items-center justify-between mb-12">
-        <h2 className="text-xl uppercase tracking-[0.3em] text-primary underline underline-offset-8 decoration-champagne-gold decoration-2">
+      <div className="flex items-center justify-between mb-8 lg:mb-12">
+        <h2 className="text-lg lg:text-xl uppercase tracking-[0.3em] text-primary underline underline-offset-8 decoration-champagne-gold decoration-2">
           Bestsellers
         </h2>
 
@@ -221,10 +221,10 @@ export default function BestsellersCarousel({ products }: Props) {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         className={[
-          // Mobile/tablet: normal grid
-          'grid grid-cols-1 md:grid-cols-3 gap-8',
+          // Mobile/tablet: swipeable horizontal scroll
+          'flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-6',
           // Desktop: horizontal scroll strip
-          'lg:flex lg:flex-row lg:overflow-x-auto lg:gap-8 lg:pb-2',
+          'lg:flex-row lg:gap-8 lg:pb-2 lg:snap-none',
           // Hide scrollbar cross-browser
           '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
         ].join(' ')}
@@ -249,29 +249,31 @@ export default function BestsellersCarousel({ products }: Props) {
           return (
             <div
               key={product.id}
-              className="relative group overflow-hidden bg-deep-slate border border-border p-8 flex items-center gap-8 rounded-lg lg:shrink-0 lg:w-95"
+              className="relative group overflow-hidden bg-deep-slate border border-border flex flex-col lg:flex-row items-center p-0 lg:p-8 gap-0 lg:gap-8 rounded-lg shrink-0 w-[85vw] sm:w-[50vw] md:w-[40vw] snap-start lg:w-95 lg:snap-none"
             >
-              <div className="shrink-0">
+              {/* Image Container: Edge-to-edge 4:5 block on mobile / tightly cropped on desktop */}
+              <div className="shrink-0 flex items-center justify-center w-full lg:w-auto aspect-[1/1] lg:aspect-auto relative overflow-hidden lg:overflow-visible bg-black/20 lg:bg-transparent">
                 <Image
                   src={imageUrl}
                   alt={altText}
-                  width={400}
-                  height={400}
-                  className="w-auto h-32 object-cover group-hover:scale-105 transition-transform duration-500 rounded"
+                  width={600}
+                  height={800}
+                  className="w-full h-full object-cover lg:w-auto lg:h-32 lg:object-contain group-hover:scale-105 transition-transform duration-500 lg:rounded"
                 />
               </div>
 
-              <div className="w-1/2">
-                <h3 className="text-base font-serif mb-2 uppercase">{product.name}</h3>
+              {/* Text Container: Padded bottom section on mobile / flexible on desktop */}
+              <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left p-6 sm:p-8 lg:p-0">
+                <h3 className="text-lg lg:text-base font-serif mb-2 uppercase">{product.name}</h3>
                 <p className="text-primary font-bold mb-6">{priceDisplay}</p>
 
                 <Link
                   href={`/product/${product.slug}`}
                   aria-label={`Buy ${product.name} now`}
-                  className="inline-flex items-center gap-2 border border-primary px-6 py-2 text-[10px] uppercase tracking-widest font-bold hover:bg-primary hover:text-black transition-colors"
+                  className="inline-flex items-center justify-center gap-2 border border-primary px-8 py-3 lg:px-6 lg:py-2 text-xs lg:text-[10px] uppercase tracking-widest font-bold hover:bg-primary hover:text-black transition-colors w-full lg:w-auto"
                 >
                   Buy Now
-                  <ArrowRight className="w-3 h-3" />
+                  <ArrowRight className="w-4 h-4 lg:w-3 lg:h-3" />
                 </Link>
               </div>
             </div>

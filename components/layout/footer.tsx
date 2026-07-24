@@ -32,7 +32,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-card border-t border-border/50 mt-auto pt-24 pb-6 px-16">
+    <footer className="bg-card border-t border-border/50 mt-auto pt-24 pb-6 px-6 md:px-16 max-md:pt-10">
       <div className="container mx-auto">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12">
@@ -143,7 +143,7 @@ export function Footer() {
                 .map((social) => {
                   const Icon =
                     socialIcons[
-                      social.icon as keyof typeof socialIcons
+                    social.icon as keyof typeof socialIcons
                     ]
 
                   return (

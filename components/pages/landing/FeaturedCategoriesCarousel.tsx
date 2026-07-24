@@ -55,8 +55,8 @@ export default function FeaturedCategoriesCarousel({ categories }: Props) {
   return (
     <>
       {/* Header row: title left, scroll arrows right (lg+ only) */}
-      <div className="flex items-center justify-between mb-12">
-        <h2 className="text-xl uppercase tracking-[0.3em] text-primary underline underline-offset-8 decoration-champagne-gold decoration-2">
+      <div className="flex items-center justify-between mb-8 lg:mb-12">
+        <h2 className="text-lg lg:text-xl uppercase tracking-[0.3em] text-primary underline underline-offset-8 decoration-champagne-gold decoration-2">
           Featured Categories
         </h2>
 
@@ -81,16 +81,16 @@ export default function FeaturedCategoriesCarousel({ categories }: Props) {
       </div>
 
       {/*
-        - Mobile/tablet (<lg): CSS grid, same as before
-        - Desktop (lg+):       flex row with hidden scrollbar
+        - Mobile/tablet (<lg): swipeable horizontal scroll with snap
+        - Desktop (lg+): flex row with hidden scrollbar
       */}
       <div
         ref={scrollRef}
         className={[
-          // Base: grid for mobile/tablet
-          'grid grid-cols-2 md:grid-cols-4 gap-8',
-          // Desktop override: horizontal scroll strip
-          'lg:flex lg:flex-row lg:overflow-x-auto lg:gap-8 lg:pb-2',
+          // Base: swipeable flex row for mobile/tablet
+          'flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-6',
+          // Desktop override: match original desktop layout
+          'lg:flex-row lg:gap-8 lg:pb-2 lg:snap-none',
           // Hide scrollbar cross-browser
           '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
         ].join(' ')}
@@ -99,10 +99,9 @@ export default function FeaturedCategoriesCarousel({ categories }: Props) {
           <Link
             key={cat.id}
             href={`/shop?category=${cat.slug}`}
-            // On lg+: fixed width so items don't collapse in flex
-            className="group aspect-square flex flex-col items-center justify-center gap-3 bg-deep-slate rounded-lg lg:shrink-0 lg:w-60"
+            className="group aspect-square flex flex-col items-center justify-center gap-3 bg-deep-slate rounded-lg p-4 shrink-0 w-[42vw] sm:w-[28vw] md:w-[22vw] snap-start lg:w-60 lg:snap-none"
           >
-            <div className="relative size-40 rounded-full border-2 border-champagne-gold p-4 group-hover:border-primary transition-colors duration-700">
+            <div className="relative size-24 sm:size-32 md:size-40 rounded-full border-2 border-champagne-gold p-2 sm:p-4 group-hover:border-primary transition-colors duration-700">
               <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">
                 <img
                   src={cat.image_url || '/placeholder.svg'}
@@ -111,7 +110,7 @@ export default function FeaturedCategoriesCarousel({ categories }: Props) {
                 />
               </div>
             </div>
-            <span className="uppercase tracking-widest text-xs font-bold group-hover:text-primary">
+            <span className="uppercase tracking-widest text-[10px] sm:text-xs font-bold group-hover:text-primary text-center">
               {cat.name}
             </span>
           </Link>

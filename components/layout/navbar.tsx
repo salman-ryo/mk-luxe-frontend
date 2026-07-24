@@ -103,7 +103,7 @@ export function Navbar() {
 
       {/* Mobile Menu Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-cyan-900 border-t border-border shadow-lg">
+        <div className="md:hidden absolute top-full left-0 w-full bg-midnight-charcoal/95 backdrop-blur-md border-t border-border shadow-lg">
           <div className="container mx-auto px-4 py-6 flex flex-col gap-6">
             {/* Mobile Nav Items */}
             <nav className="flex flex-col gap-4">

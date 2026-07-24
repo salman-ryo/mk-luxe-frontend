@@ -195,10 +195,10 @@ export default function ProductDetailsClient({ product }: { product: Product }) 
       return
     }
 
-const pageUrl =
-  typeof window !== "undefined"
-    ? window.location.href
-    : `${clientEnv.FRONTEND_URI}/product/${product.slug}`
+    const pageUrl =
+      typeof window !== "undefined"
+        ? window.location.href
+        : `${clientEnv.FRONTEND_URI}/product/${product.slug}`
 
     const message = buildWhatsAppMessage({
       intent: whatsappIntent,
@@ -217,7 +217,7 @@ const pageUrl =
   }
 
   return (
-    <div className="container mx-auto py-12 px-8 lg:py-10 lg:px-16 bg-midnight-charcoal">
+    <div className="container mx-auto py-12 px-4 sm:px-8 lg:py-10 lg:px-16 bg-midnight-charcoal max-md:px-8">
       <div className="mb-6">
         <h1 className="text-3xl font-semibold tracking-tight lg:text-4xl">{product.name}</h1>
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">
@@ -268,11 +268,10 @@ const pageUrl =
                 key={`${img.id}-${index}`}
                 type="button"
                 onClick={() => setSelectedImage(index)}
-                className={`aspect-square overflow-hidden rounded-xl border bg-card transition ${
-                  selectedImage === index
+                className={`aspect-square overflow-hidden rounded-xl border bg-card transition ${selectedImage === index
                     ? "border-primary ring-2 ring-primary/20"
                     : "border-border opacity-70 hover:opacity-100"
-                }`}
+                  }`}
                 aria-label={`View image ${index + 1}`}
               >
                 <img
@@ -370,11 +369,10 @@ const pageUrl =
                       key={variant.sku}
                       type="button"
                       onClick={() => setSelectedVariantSku(variant.sku)}
-                      className={`rounded-2xl border p-4 text-left transition ${
-                        active
+                      className={`rounded-2xl border p-4 text-left transition ${active
                           ? "border-primary bg-primary/5 ring-2 ring-primary/10"
                           : "border-border bg-card hover:border-primary/40"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div>

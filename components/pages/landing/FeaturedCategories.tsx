@@ -10,8 +10,8 @@ export default async function FeaturedCategories() {
   if (featured.length === 0) return null;
 
   return (
-    <section className="py-24 px-16 bg-midnight-charcoal">
-      <div className="container mx-auto px-4">
+    <section className="py-12 lg:py-24 px-4 md:px-16 bg-midnight-charcoal max-md:px-8">
+      <div className="container mx-auto">
         <FeaturedCategoriesCarousel categories={featured} />
       </div>
     </section>
