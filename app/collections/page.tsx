@@ -7,7 +7,7 @@ const collections = [
     title: "Celestial Harmony",
     description:
       "Inspired by the infinite beauty of the night sky, featuring deep sapphires and brilliant diamonds set in rose gold.",
-    image: "/dark-moody-luxury-jewelry-necklace.jpg",
+    image: "/images/collection/dark-moody-luxury-jewelry-necklace.jpg",
     itemCount: 12,
   },
   {
@@ -15,7 +15,7 @@ const collections = [
     title: "Heritage Gold",
     description:
       "A tribute to timeless craftsmanship. Bold, architectural pieces that celebrate the rich history of fine metalwork.",
-    image: "/gold-bangle-bracelet.jpg",
+    image: "/images/collection/gold-bangle-bracelet.jpg",
     itemCount: 8,
   },
   {
@@ -23,7 +23,7 @@ const collections = [
     title: "The Modernist",
     description:
       "Minimalist silhouettes and avant-garde designs for the contemporary connoisseur who values understated elegance.",
-    image: "/silver-watch-minimal.jpg",
+    image: "/images/collection/luxury-ring-pendant-1.jpg",
     itemCount: 15,
   },
 ]
@@ -68,10 +68,10 @@ export default function CollectionsPage() {
                 <h3 className="text-4xl font-serif uppercase mb-6 leading-tight">{collection.title}</h3>
                 <p className="text-muted-foreground mb-10 text-pretty leading-relaxed">{collection.description}</p>
                 <Link
-                  href={`/shop?collection=${collection.id}`}
+                  href={`/shop`}
                   className="group inline-flex items-center gap-4 text-xs uppercase tracking-[0.2em] font-bold hover:text-primary transition-colors"
                 >
-                  Explore Collection
+                  Explore Products
                   <span className="p-2 border border-border group-hover:border-primary rounded-full transition-colors">
                     <ArrowRight className="w-4 h-4" />
                   </span>
