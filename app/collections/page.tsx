@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 
 const collections = [
@@ -30,50 +31,63 @@ const collections = [
 
 export default function CollectionsPage() {
   return (
-    <div className="min-h-screen bg-background pt-32 pb-24">
+    <div className="min-h-screen bg-background pt-28 pb-16 md:pt-36 md:pb-24 px-16 max-md:px-8">
       <div className="container mx-auto px-4">
-        <div className="max-w-2xl mb-16">
-          <h1 className="text-sm uppercase tracking-[0.4em] text-primary mb-6 border-l-2 border-primary pl-4">
+        <div className="max-w-2xl mb-16 md:mb-24">
+          <h1 className="text-xs md:text-sm uppercase tracking-[0.4em] text-champagne-gold mb-6 border-l-2 border-champagne-gold pl-4 font-semibold">
             Curated Collections
           </h1>
-          <h2 className="text-5xl md:text-6xl font-serif leading-tight uppercase mb-8">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif leading-tight uppercase mb-6 md:mb-8">
             Exquisite <br />
-            <span className="text-primary italic">Narratives</span>
+            <span className="text-champagne-gold italic font-normal">Narratives</span>
           </h2>
-          <p className="text-muted-foreground text-lg leading-relaxed">
+          <p className="text-muted-foreground text-base sm:text-lg leading-relaxed">
             Discover our meticulously crafted series, each telling a unique story of elegance, power, and timeless
             beauty.
           </p>
         </div>
 
-        <div className="space-y-32">
+        <div className="space-y-20 md:space-y-32">
           {collections.map((collection, index) => (
             <section
               key={collection.id}
-              className={`flex flex-col gap-12 items-center ${index % 2 === 1 ? "md:flex-row-reverse" : "md:flex-row"}`}
+              className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-center"
             >
-              <div className="w-full md:w-3/5 relative aspect-4/5 md:aspect-video overflow-hidden group">
-                <img
+              <div
+                className={`w-full md:col-span-7 relative aspect-[4/5] md:aspect-[16/10] overflow-hidden group ${index % 2 === 1 ? "md:order-2" : "md:order-1"
+                  }`}
+              >
+                <Image
                   src={collection.image || "/placeholder.svg"}
                   alt={collection.title}
-                  className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 55vw"
+                  className="object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                  priority={index === 0}
                 />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
               </div>
 
-              <div className="w-full md:w-2/5 flex flex-col justify-center">
-                <span className="text-[10px] uppercase tracking-[0.3em] text-primary mb-4">
+              <div
+                className={`w-full md:col-span-5 flex flex-col justify-center ${index % 2 === 1 ? "md:order-1" : "md:order-2"
+                  }`}
+              >
+                <span className="text-[10px] uppercase tracking-[0.3em] text-champagne-gold mb-4 font-semibold">
                   {collection.itemCount} Pieces
                 </span>
-                <h3 className="text-4xl font-serif uppercase mb-6 leading-tight">{collection.title}</h3>
-                <p className="text-muted-foreground mb-10 text-pretty leading-relaxed">{collection.description}</p>
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif uppercase mb-6 leading-tight text-white">
+                  {collection.title}
+                </h3>
+                <p className="text-muted-foreground mb-8 md:mb-10 text-pretty leading-relaxed text-sm md:text-base">
+                  {collection.description}
+                </p>
                 <Link
                   href={`/shop`}
-                  className="group inline-flex items-center gap-4 text-xs uppercase tracking-[0.2em] font-bold hover:text-primary transition-colors"
+                  className="group inline-flex items-center gap-4 text-xs uppercase tracking-[0.2em] font-bold text-white hover:text-champagne-gold transition-colors w-fit"
                 >
                   Explore Products
-                  <span className="p-2 border border-border group-hover:border-primary rounded-full transition-colors">
-                    <ArrowRight className="w-4 h-4" />
+                  <span className="p-2 border border-border group-hover:border-champagne-gold rounded-full transition-colors">
+                    <ArrowRight className="w-4 h-4 text-white group-hover:text-champagne-gold transition-colors" />
                   </span>
                 </Link>
               </div>
@@ -84,3 +98,4 @@ export default function CollectionsPage() {
     </div>
   )
 }
+
