@@ -425,120 +425,208 @@ export default function ProductsPage() {
         </div>
       ) : (
         <div className={`space-y-4 transition-all duration-200 ${isFetching && !isLoading ? 'opacity-60 pointer-events-none' : 'opacity-100'}`}>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[60px]">Media</TableHead>
-                <TableHead>Product Name</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Price / Stock</TableHead>
-                <TableHead>Badges</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {products.map((product) => {
-                const primaryMedia = product.media?.find((m) => m.is_primary) || product.media?.[0];
-                const minPrice = product.variants?.length
-                  ? Math.min(...product.variants.map((v) => v.price))
-                  : 0;
-                const totalStock = product.variants?.length
-                  ? product.variants.reduce((acc, v) => acc + (v.stock || 0), 0)
-                  : 0;
+          {/* Mobile Card List View (< md) */}
+          <div className="grid grid-cols-1 gap-4 md:hidden">
+            {products.map((product) => {
+              const primaryMedia = product.media?.find((m) => m.is_primary) || product.media?.[0];
+              const minPrice = product.variants?.length
+                ? Math.min(...product.variants.map((v) => v.price))
+                : 0;
+              const totalStock = product.variants?.length
+                ? product.variants.reduce((acc, v) => acc + (v.stock || 0), 0)
+                : 0;
 
-                return (
-                  <TableRow key={product.id}>
-                    <TableCell>
-                      <div className="w-10 h-10 rounded-lg border bg-muted/40 overflow-hidden flex items-center justify-center relative shrink-0">
-                        {primaryMedia?.url ? (
-                          <img
-                            src={primaryMedia.url}
-                            alt={primaryMedia.alt || product.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <ImageIcon className="w-5 h-5 text-muted-foreground/40" />
-                        )}
+              return (
+                <div key={product.id} className="p-4 border border-border/80 rounded-xl bg-card/30 backdrop-blur-sm space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-14 h-14 rounded-lg border bg-muted/40 overflow-hidden flex items-center justify-center relative shrink-0">
+                      {primaryMedia?.url ? (
+                        <img
+                          src={primaryMedia.url}
+                          alt={primaryMedia.alt || product.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <ImageIcon className="w-6 h-6 text-muted-foreground/40" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="font-semibold text-sm text-foreground truncate">{product.name}</h3>
+                        {product.status === 'published' && <Badge variant="success" className="text-[10px] shrink-0">Published</Badge>}
+                        {product.status === 'draft' && <Badge variant="warning" className="text-[10px] shrink-0">Draft</Badge>}
+                        {product.status === 'archived' && <Badge variant="destructive" className="text-[10px] shrink-0">Archived</Badge>}
                       </div>
-                    </TableCell>
-
-                    <TableCell>
-                      <div>
-                        <p className="font-semibold text-foreground">{product.name}</p>
-                        <p className="text-xs font-mono text-muted-foreground">{product.slug}</p>
-                      </div>
-                    </TableCell>
-
-                    <TableCell>
-                      <Badge variant="outline" className="capitalize">
-                        {product.category_slug}
-                      </Badge>
-                    </TableCell>
-
-                    <TableCell>
-                      {product.status === 'published' && <Badge variant="success">Published</Badge>}
-                      {product.status === 'draft' && <Badge variant="warning">Draft</Badge>}
-                      {product.status === 'archived' && <Badge variant="destructive">Archived</Badge>}
-                    </TableCell>
-
-                    <TableCell>
-                      <div>
-                        <p className="font-semibold text-sm text-champagne-gold font-mono">
-                          ₹{minPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {totalStock} in stock ({product.variants?.length || 0} variants)
-                        </p>
-                      </div>
-                    </TableCell>
-
-                    <TableCell>
-                      <div className="flex flex-wrap gap-1">
+                      <p className="text-xs font-mono text-muted-foreground truncate">{product.slug}</p>
+                      <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                        <Badge variant="outline" className="text-[10px] capitalize">
+                          {product.category_slug}
+                        </Badge>
                         {product.is_featured && (
                           <Badge variant="gold" className="text-[10px]">
-                            <Star className="w-3 h-3 mr-1 fill-champagne-gold" /> Featured
+                            <Star className="w-2.5 h-2.5 mr-1 fill-champagne-gold" /> Featured
                           </Badge>
                         )}
                         {product.is_most_sold && (
                           <Badge variant="info" className="text-[10px]">
-                            <Flame className="w-3 h-3 mr-1 text-sky-400" /> Top Seller
+                            <Flame className="w-2.5 h-2.5 mr-1 text-sky-400" /> Top Seller
                           </Badge>
                         )}
                       </div>
-                    </TableCell>
+                    </div>
+                  </div>
 
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleOpenEdit(product)}
-                          className="h-8 w-8 hover:text-champagne-gold"
-                          title="Edit Product"
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => setDeletingProduct(product)}
-                          className="h-8 w-8 text-muted-foreground hover:text-red-500 hover:bg-red-500/10"
-                          title="Delete Product"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+                  <div className="flex items-center justify-between pt-3 border-t border-border/50 text-xs">
+                    <div>
+                      <span className="font-bold text-champagne-gold font-mono text-sm">
+                        ₹{minPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                      </span>
+                      <span className="text-muted-foreground ml-1.5 text-[11px]">
+                        ({totalStock} in stock)
+                      </span>
+                    </div>
+
+                    <div className="flex items-center space-x-1.5">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleOpenEdit(product)}
+                        className="h-8 px-2.5 text-xs hover:text-champagne-gold"
+                      >
+                        <Pencil className="w-3.5 h-3.5 mr-1" /> Edit
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setDeletingProduct(product)}
+                        className="h-8 px-2.5 text-xs text-muted-foreground hover:text-red-500 hover:border-red-500/40"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Desktop Data Table (>= md) */}
+          <div className="hidden md:block overflow-x-auto rounded-xl border border-border/80">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[60px]">Media</TableHead>
+                  <TableHead>Product Name</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Price / Stock</TableHead>
+                  <TableHead>Badges</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {products.map((product) => {
+                  const primaryMedia = product.media?.find((m) => m.is_primary) || product.media?.[0];
+                  const minPrice = product.variants?.length
+                    ? Math.min(...product.variants.map((v) => v.price))
+                    : 0;
+                  const totalStock = product.variants?.length
+                    ? product.variants.reduce((acc, v) => acc + (v.stock || 0), 0)
+                    : 0;
+
+                  return (
+                    <TableRow key={product.id}>
+                      <TableCell>
+                        <div className="w-10 h-10 rounded-lg border bg-muted/40 overflow-hidden flex items-center justify-center relative shrink-0">
+                          {primaryMedia?.url ? (
+                            <img
+                              src={primaryMedia.url}
+                              alt={primaryMedia.alt || product.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <ImageIcon className="w-5 h-5 text-muted-foreground/40" />
+                          )}
+                        </div>
+                      </TableCell>
+
+                      <TableCell>
+                        <div>
+                          <p className="font-semibold text-foreground">{product.name}</p>
+                          <p className="text-xs font-mono text-muted-foreground">{product.slug}</p>
+                        </div>
+                      </TableCell>
+
+                      <TableCell>
+                        <Badge variant="outline" className="capitalize">
+                          {product.category_slug}
+                        </Badge>
+                      </TableCell>
+
+                      <TableCell>
+                        {product.status === 'published' && <Badge variant="success">Published</Badge>}
+                        {product.status === 'draft' && <Badge variant="warning">Draft</Badge>}
+                        {product.status === 'archived' && <Badge variant="destructive">Archived</Badge>}
+                      </TableCell>
+
+                      <TableCell>
+                        <div>
+                          <p className="font-semibold text-sm text-champagne-gold font-mono">
+                            ₹{minPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {totalStock} in stock ({product.variants?.length || 0} variants)
+                          </p>
+                        </div>
+                      </TableCell>
+
+                      <TableCell>
+                        <div className="flex flex-wrap gap-1">
+                          {product.is_featured && (
+                            <Badge variant="gold" className="text-[10px]">
+                              <Star className="w-3 h-3 mr-1 fill-champagne-gold" /> Featured
+                            </Badge>
+                          )}
+                          {product.is_most_sold && (
+                            <Badge variant="info" className="text-[10px]">
+                              <Flame className="w-3 h-3 mr-1 text-sky-400" /> Top Seller
+                            </Badge>
+                          )}
+                        </div>
+                      </TableCell>
+
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end space-x-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleOpenEdit(product)}
+                            className="h-8 w-8 hover:text-champagne-gold"
+                            title="Edit Product"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setDeletingProduct(product)}
+                            className="h-8 w-8 text-muted-foreground hover:text-red-500 hover:bg-red-500/10"
+                            title="Delete Product"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
 
           {/* Pagination Controls */}
-          <div className="flex items-center justify-between p-4 border rounded-xl bg-card/40">
-            <p className="text-xs text-muted-foreground">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 border rounded-xl bg-card/40">
+            <p className="text-xs text-muted-foreground text-center sm:text-left">
               Showing page <strong className="text-foreground">{pagination.page}</strong> of{' '}
               <strong className="text-foreground">{totalPages}</strong> ({pagination.total} total items)
             </p>

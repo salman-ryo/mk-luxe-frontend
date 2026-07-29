@@ -115,26 +115,26 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
       {/* Welcome Banner */}
-      <div className="relative rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950/40 p-6 md:p-8 border border-blue-500/20 shadow-xl overflow-hidden">
-        <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
+      <div className="relative rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950/40 p-5 sm:p-6 md:p-8 border border-blue-500/20 shadow-xl overflow-hidden">
+        <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 space-y-2 max-w-2xl">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-950 border border-champagne-gold/20 text-champagne-gold text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
             <span>MK LUXE Executive Dashboard</span>
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
             Welcome Back, Administrator
           </h1>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
             Monitor luxury catalog metrics, update categories, and handle customer inquiries seamlessly.
           </p>
         </div>
       </div>
 
       {/* Metric Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {/* Products Metric */}
         <Card className="relative overflow-hidden border-border/80 hover:border-champagne-gold/40 transition-all bg-card/30 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -245,22 +245,22 @@ export default function DashboardPage() {
             </div>
           </CardHeader>
           <CardContent className="pt-6">
-            <div className="space-y-4 max-h-[380px] overflow-y-auto pr-1">
+            <div className="space-y-3 max-h-[420px] overflow-y-auto pr-1">
               {stats.category_stats?.length > 0 ? (
                 stats.category_stats.map((c) => {
                   const percentage = maxProductCount > 0 ? Math.round((c.product_count / maxProductCount) * 100) : 0;
                   return (
-                    <div key={c.slug} className="space-y-2">
-                      <div className="flex items-center justify-between text-xs font-semibold">
-                        <span className="text-foreground">{c.name}</span>
-                        <span className="text-muted-foreground font-mono bg-muted/40 px-2 py-0.5 rounded border border-border/40">
-                          {c.product_count} product{c.product_count !== 1 ? 's' : ''}
+                    <div key={c.slug} className="p-3 rounded-xl bg-muted/20 border border-border/40 space-y-2">
+                      <div className="flex items-center justify-between gap-2 text-xs font-semibold">
+                        <span className="text-foreground truncate min-w-0">{c.name}</span>
+                        <span className="text-champagne-gold font-mono text-[11px] bg-champagne-gold/10 px-2 py-0.5 rounded border border-champagne-gold/20 shrink-0">
+                          {c.product_count} product{c.product_count !== 1 ? 's' : ''} ({percentage}%)
                         </span>
                       </div>
-                      <div className="w-full bg-[#1b1b1f] border border-border/50 h-2 rounded-full overflow-hidden shadow-inner">
+                      <div className="w-full bg-slate-950 border border-border/60 h-2.5 rounded-full overflow-hidden shadow-inner p-0.5">
                         <div
-                          className="bg-gradient-to-r from-champagne-gold to-muted-bronze h-full rounded-full transition-all duration-500"
-                          style={{ width: `${percentage}%` }}
+                          className="bg-gradient-to-r from-champagne-gold via-amber-400 to-yellow-600 h-full rounded-full transition-all duration-500"
+                          style={{ width: `${Math.max(percentage, 2)}%` }}
                         />
                       </div>
                     </div>

@@ -135,88 +135,160 @@ export default function InquiriesPage() {
         </div>
       ) : (
         <div className={`transition-all duration-200 ${isFetching && !isLoading ? 'opacity-60 pointer-events-none' : 'opacity-100'}`}>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Customer Details</TableHead>
-                <TableHead>Subject</TableHead>
-                <TableHead className="max-w-md">Message Content</TableHead>
-                <TableHead>Current Status</TableHead>
-                <TableHead className="text-right">Update Status Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredInquiries.map((inquiry) => (
-                <TableRow key={inquiry.id}>
-                  <TableCell>
-                    <div className="space-y-1">
-                      <div className="flex items-center space-x-1.5 font-semibold text-foreground text-sm">
-                        <User className="w-3.5 h-3.5 text-champagne-gold shrink-0" />
-                        <span>{inquiry.name}</span>
-                      </div>
-                      <div className="flex items-center space-x-1.5 text-xs text-muted-foreground">
-                        <Mail className="w-3.5 h-3.5 shrink-0" />
-                        <span>{inquiry.email}</span>
-                      </div>
-                      {inquiry.phone && (
-                        <div className="flex items-center space-x-1.5 text-xs text-muted-foreground">
-                          <Phone className="w-3.5 h-3.5 shrink-0" />
-                          <span>{inquiry.phone}</span>
-                        </div>
-                      )}
+          {/* Mobile Inquiries Cards (< md) */}
+          <div className="grid grid-cols-1 gap-4 md:hidden">
+            {filteredInquiries.map((inquiry) => (
+              <div key={inquiry.id} className="p-4 border border-border/80 rounded-xl bg-card/30 backdrop-blur-sm space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex items-center space-x-1.5 font-semibold text-foreground text-sm">
+                      <User className="w-3.5 h-3.5 text-champagne-gold shrink-0" />
+                      <span className="truncate">{inquiry.name}</span>
                     </div>
-                  </TableCell>
-
-                  <TableCell className="font-medium">{inquiry.subject}</TableCell>
-
-                  <TableCell className="max-w-md">
-                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                      {inquiry.message}
-                    </p>
-                  </TableCell>
-
-                  <TableCell>
-                    {inquiry.status === 'pending' && (
-                      <Badge variant="warning" className="flex items-center w-fit space-x-1">
-                        <Clock className="w-3 h-3" />
-                        <span>Pending</span>
-                      </Badge>
+                    <div className="flex items-center space-x-1.5 text-xs text-muted-foreground">
+                      <Mail className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">{inquiry.email}</span>
+                    </div>
+                    {inquiry.phone && (
+                      <div className="flex items-center space-x-1.5 text-xs text-muted-foreground">
+                        <Phone className="w-3.5 h-3.5 shrink-0" />
+                        <span>{inquiry.phone}</span>
+                      </div>
                     )}
-                    {inquiry.status === 'in_progress' && (
-                      <Badge variant="info" className="flex items-center w-fit space-x-1">
-                        <AlertCircle className="w-3 h-3" />
-                        <span>In Progress</span>
-                      </Badge>
-                    )}
-                    {inquiry.status === 'resolved' && (
-                      <Badge variant="success" className="flex items-center w-fit space-x-1">
-                        <CheckCircle2 className="w-3 h-3" />
-                        <span>Resolved</span>
-                      </Badge>
-                    )}
-                  </TableCell>
+                  </div>
 
-                  <TableCell className="text-right">
-                    <select
-                      value={inquiry.status}
-                      onChange={(e) =>
-                        updateStatusMutation.mutate({
-                          id: inquiry.id,
-                          status: e.target.value as 'pending' | 'in_progress' | 'resolved',
-                        })
-                      }
-                      disabled={updateStatusMutation.isPending}
-                      className="w-36 text-xs h-9 inline-block bg-[#0a0a0c] border border-border px-2 py-1 focus:outline-none focus:border-primary rounded-md text-foreground cursor-pointer"
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="in_progress">In Progress</option>
-                      <option value="resolved">Resolved</option>
-                    </select>
-                  </TableCell>
+                  {inquiry.status === 'pending' && (
+                    <Badge variant="warning" className="flex items-center space-x-1 text-[10px] shrink-0">
+                      <Clock className="w-2.5 h-2.5" />
+                      <span>Pending</span>
+                    </Badge>
+                  )}
+                  {inquiry.status === 'in_progress' && (
+                    <Badge variant="info" className="flex items-center space-x-1 text-[10px] shrink-0">
+                      <AlertCircle className="w-2.5 h-2.5" />
+                      <span>In Progress</span>
+                    </Badge>
+                  )}
+                  {inquiry.status === 'resolved' && (
+                    <Badge variant="success" className="flex items-center space-x-1 text-[10px] shrink-0">
+                      <CheckCircle2 className="w-2.5 h-2.5" />
+                      <span>Resolved</span>
+                    </Badge>
+                  )}
+                </div>
+
+                <div className="pt-2 border-t border-border/50">
+                  <p className="text-xs font-semibold text-foreground">{inquiry.subject}</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed mt-1">{inquiry.message}</p>
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-border/50 text-xs">
+                  <span className="text-[11px] text-muted-foreground">Update status:</span>
+                  <select
+                    value={inquiry.status}
+                    onChange={(e) =>
+                      updateStatusMutation.mutate({
+                        id: inquiry.id,
+                        status: e.target.value as 'pending' | 'in_progress' | 'resolved',
+                      })
+                    }
+                    disabled={updateStatusMutation.isPending}
+                    className="w-36 text-xs h-8 bg-[#0a0a0c] border border-border px-2 py-1 focus:outline-none focus:border-primary rounded-md text-foreground cursor-pointer"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="resolved">Resolved</option>
+                  </select>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Inquiries Table (>= md) */}
+          <div className="hidden md:block overflow-x-auto rounded-xl border border-border/80">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Customer Details</TableHead>
+                  <TableHead>Subject</TableHead>
+                  <TableHead className="max-w-md">Message Content</TableHead>
+                  <TableHead>Current Status</TableHead>
+                  <TableHead className="text-right">Update Status Action</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredInquiries.map((inquiry) => (
+                  <TableRow key={inquiry.id}>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <div className="flex items-center space-x-1.5 font-semibold text-foreground text-sm">
+                          <User className="w-3.5 h-3.5 text-champagne-gold shrink-0" />
+                          <span>{inquiry.name}</span>
+                        </div>
+                        <div className="flex items-center space-x-1.5 text-xs text-muted-foreground">
+                          <Mail className="w-3.5 h-3.5 shrink-0" />
+                          <span>{inquiry.email}</span>
+                        </div>
+                        {inquiry.phone && (
+                          <div className="flex items-center space-x-1.5 text-xs text-muted-foreground">
+                            <Phone className="w-3.5 h-3.5 shrink-0" />
+                            <span>{inquiry.phone}</span>
+                          </div>
+                        )}
+                      </div>
+                    </TableCell>
+
+                    <TableCell className="font-medium">{inquiry.subject}</TableCell>
+
+                    <TableCell className="max-w-md">
+                      <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                        {inquiry.message}
+                      </p>
+                    </TableCell>
+
+                    <TableCell>
+                      {inquiry.status === 'pending' && (
+                        <Badge variant="warning" className="flex items-center w-fit space-x-1">
+                          <Clock className="w-3 h-3" />
+                          <span>Pending</span>
+                        </Badge>
+                      )}
+                      {inquiry.status === 'in_progress' && (
+                        <Badge variant="info" className="flex items-center w-fit space-x-1">
+                          <AlertCircle className="w-3 h-3" />
+                          <span>In Progress</span>
+                        </Badge>
+                      )}
+                      {inquiry.status === 'resolved' && (
+                        <Badge variant="success" className="flex items-center w-fit space-x-1">
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>Resolved</span>
+                        </Badge>
+                      )}
+                    </TableCell>
+
+                    <TableCell className="text-right">
+                      <select
+                        value={inquiry.status}
+                        onChange={(e) =>
+                          updateStatusMutation.mutate({
+                            id: inquiry.id,
+                            status: e.target.value as 'pending' | 'in_progress' | 'resolved',
+                          })
+                        }
+                        disabled={updateStatusMutation.isPending}
+                        className="w-36 text-xs h-9 inline-block bg-[#0a0a0c] border border-border px-2 py-1 focus:outline-none focus:border-primary rounded-md text-foreground cursor-pointer"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                      </select>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       )}
     </div>

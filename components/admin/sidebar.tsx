@@ -40,15 +40,15 @@ const navItems = [
   },
 ];
 
-export function Sidebar() {
+export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
 
   return (
-    <aside className="w-64 border-r bg-card/60 backdrop-blur-xl flex flex-col h-screen sticky top-0 z-40 transition-all duration-300">
+    <div className="flex flex-col h-full bg-card/60 backdrop-blur-xl">
       {/* Brand Header */}
-      <div className="h-16 px-6 border-b flex items-center justify-between">
-        <Link href="/admin/dashboard" className="flex items-center space-x-3 group">
+      <div className="h-16 px-6 border-b flex items-center justify-between shrink-0">
+        <Link href="/admin/dashboard" onClick={onNavigate} className="flex items-center space-x-3 group">
           <div>
             <p className="text-xl font-medium text-muted-foreground uppercase tracking-widest">
               Admin Portal
@@ -71,6 +71,7 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onNavigate}
               className={cn(
                 'flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group',
                 isActive
@@ -94,7 +95,7 @@ export function Sidebar() {
       </div>
 
       {/* User Footer */}
-      <div className="p-4 border-t bg-muted/20 space-y-3">
+      <div className="p-4 border-t bg-muted/20 space-y-3 shrink-0">
         <div className="flex items-center space-x-3 px-2">
           <div className="w-9 h-9 rounded-full bg-champagne-gold/20 text-champagne-gold flex items-center justify-center font-bold text-sm border border-champagne-gold/30 shrink-0">
             {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
@@ -111,13 +112,24 @@ export function Sidebar() {
         <Button
           variant="outline"
           size="sm"
-          onClick={logout}
+          onClick={() => {
+            if (onNavigate) onNavigate();
+            logout();
+          }}
           className="w-full text-muted-foreground hover:text-red-500 hover:border-red-500/40 hover:bg-red-500/10 transition-colors"
         >
           <LogOut className="w-3.5 h-3.5 mr-2" />
           Sign Out
         </Button>
       </div>
+    </div>
+  );
+}
+
+export function Sidebar() {
+  return (
+    <aside className="hidden md:flex w-64 border-r bg-card/60 backdrop-blur-xl flex-col h-screen sticky top-0 z-40 transition-all duration-300">
+      <SidebarContent />
     </aside>
   );
 }
