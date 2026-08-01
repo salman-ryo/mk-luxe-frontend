@@ -1,6 +1,20 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Curated Fine Jewelry Collections",
+  description: "Discover our meticulously crafted series — Celestial Harmony, Heritage Gold, and The Modernist. Each piece tells a story of timeless beauty.",
+  alternates: {
+    canonical: "https://mk-luxe-divine.in/collections",
+  },
+  openGraph: {
+    title: "Curated Fine Jewelry Collections | MK Luxe Divine",
+    description: "Discover our meticulously crafted series — Celestial Harmony, Heritage Gold, and The Modernist.",
+    url: "https://mk-luxe-divine.in/collections",
+  },
+}
 
 const collections = [
   {
@@ -98,4 +112,3 @@ export default function CollectionsPage() {
     </div>
   )
 }
-

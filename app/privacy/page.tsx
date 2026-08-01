@@ -1,6 +1,20 @@
 // app/privacy/page.tsx
 
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "Read the Privacy Policy for MK Luxe Divine. Learn how we collect, protect, and use your personal information.",
+  alternates: {
+    canonical: "https://mk-luxe-divine.in/privacy",
+  },
+  openGraph: {
+    title: "Privacy Policy | MK Luxe Divine",
+    description: "Read the Privacy Policy for MK Luxe Divine.",
+    url: "https://mk-luxe-divine.in/privacy",
+  },
+};
 import {
   ShieldCheck,
   LockKeyhole,

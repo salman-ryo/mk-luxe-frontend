@@ -1,7 +1,21 @@
 
 // app/terms-and-conditions/page.tsx
 
+import type { Metadata } from "next"
 import Link from "next/link"
+
+export const metadata: Metadata = {
+  title: "Terms & Conditions",
+  description: "Read the Terms & Conditions governing the use of MK Luxe Divine website, product orders, and luxury services.",
+  alternates: {
+    canonical: "https://mk-luxe-divine.in/terms-and-conditions",
+  },
+  openGraph: {
+    title: "Terms & Conditions | MK Luxe Divine",
+    description: "Read the Terms & Conditions governing the use of MK Luxe Divine website and services.",
+    url: "https://mk-luxe-divine.in/terms-and-conditions",
+  },
+}
 import { FileText, Scale, ShieldCheck, Mail, Phone, MapPin } from "lucide-react"
 
 import { Button } from "@/components/ui/button"

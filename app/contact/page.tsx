@@ -1,5 +1,6 @@
 // app/contact/page.tsx
 
+import type { Metadata } from "next"
 import Link from "next/link"
 
 import {
@@ -10,6 +11,19 @@ import {
   MapPin,
   Clock,
 } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Contact Us & Bespoke Inquiries",
+  description: "Get in touch with the luxury concierge at MK Luxe Divine for private consultations, custom adornment inquiries, or order support.",
+  alternates: {
+    canonical: "https://mk-luxe-divine.in/contact",
+  },
+  openGraph: {
+    title: "Contact Us & Bespoke Inquiries | MK Luxe Divine",
+    description: "Get in touch with the luxury concierge at MK Luxe Divine for private consultations or custom adornment inquiries.",
+    url: "https://mk-luxe-divine.in/contact",
+  },
+}
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

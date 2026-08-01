@@ -1,5 +1,6 @@
 // app/about/page.tsx
 
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,6 +12,19 @@ import {
   aboutPageData,
   type FeatureItem,
 } from "@/lib/constants/about-page-data";
+
+export const metadata: Metadata = {
+  title: "Our Heritage & Craftsmanship",
+  description: "Learn about the heritage, master artisans, and relentless pursuit of jewelry perfection behind MK Luxe Divine.",
+  alternates: {
+    canonical: "https://mk-luxe-divine.in/about",
+  },
+  openGraph: {
+    title: "Our Heritage & Craftsmanship | MK Luxe Divine",
+    description: "Learn about the heritage, master artisans, and relentless pursuit of jewelry perfection behind MK Luxe Divine.",
+    url: "https://mk-luxe-divine.in/about",
+  },
+};
 
 const iconMap = {
   hammer: Hammer,
