@@ -3,24 +3,39 @@ import { getApiUrl } from "@/lib/config"
 import type { Product, PaginatedResponse } from "@/types/api"
 
 /**
- * Safely parses any date value into a valid ISO 8601 string.
- * Prevents 'Invalid Date' errors in Google Search Console if a product's
- * updated_at or created_at timestamp is null, undefined, or malformed.
+ * Returns a valid Date for sitemap lastModified.
+ * Falls back to the current date if the supplied value is:
+ * - null or undefined
+ * - invalid
+ * - Go's zero time (0001-01-01...)
+ * - Unix epoch (1970-01-01...)
  */
-function toValidIsoDate(dateInput?: string | Date | null): string {
+function toValidDate(dateInput?: string | Date | null): Date {
+  const now = new Date()
+
   if (!dateInput) {
-    return new Date().toISOString()
+    return now
   }
+
   const parsed = new Date(dateInput)
-  if (isNaN(parsed.getTime())) {
-    return new Date().toISOString()
+
+  if (Number.isNaN(parsed.getTime())) {
+    return now
   }
-  return parsed.toISOString()
+
+  const year = parsed.getUTCFullYear()
+
+  // Reject obviously invalid/default dates
+  if (year <= 1970) {
+    return now
+  }
+
+  return parsed
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://mk-luxe-divine.in"
-  const currentDate = new Date().toISOString()
+  const currentDate = new Date()
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
@@ -80,17 +95,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     if (res.ok) {
       const responseData: PaginatedResponse<Product> = await res.json()
-      const products = responseData.data || []
+      const products = responseData.data ?? []
 
       productRoutes = products.map((product) => ({
         url: `${baseUrl}/product/${product.slug}`,
-        lastModified: toValidIsoDate(product.updated_at || product.created_at),
+        lastModified: toValidDate(
+          product.updated_at ?? product.created_at
+        ),
         changeFrequency: "monthly",
         priority: 0.8,
       }))
     }
-  } catch {
-    // Graceful fallback if backend is unreachable during static generation
+  } catch (error) {
+    console.error("Failed to generate sitemap product routes:", error)
   }
 
   return [...staticRoutes, ...productRoutes]
